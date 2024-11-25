@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Página</title>
+</head>
+<body>
+<h1>Bem-vindo ao meu servidor Spring Boot!</h1>
+<p>Esta é uma página HTML servida pelo Spring Boot.</p>
+
+<div class="upload-container">
+    <h2>Carregar Horário</h2>
+    <form id="uploadForm">
+        <!-- <label for="scheduleFile">Escolha um arquivo CSV:</label> -->
+        <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
+        <button type="submit">Carregar</button>
+    </form>
+    <div id="responseMessage"></div>
+
+    <!-- Adicionar a tabela aqui -->
+    <h2>Horários Processados</h2>
+    <table style="border: 1px solid black; border-collapse: collapse;">
+        <thead id="tableHeader"></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<div id="root"></div>
+<script src="script.js"></script>
+<link rel="stylesheet" href="styleTable.css">
+</body>
+</html>
+
