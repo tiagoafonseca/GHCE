@@ -4,9 +4,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    padding-bottom: 10rem;
     margin: 0;
     background-color: #f5f7fa;
+    flex-direction: column;
+    overflow-y: scroll;
 }
 
 /* Caixa do formulário */
@@ -66,3 +68,34 @@ body {
 .upload-container button:hover {
     background-color: #0056b3;
 }
+
+ table {
+     display: flex;
+     width: 80%;
+     margin-top: 20px;
+     font-family: Arial, sans-serif;
+     font-size: 14px;
+     max-height: 300px;
+     overflow-y: scroll;
+     flex-direction: column;
+ }
+
+ th, td {
+     border: 1px solid #ddd;
+     padding: 8px;
+     text-align: left;
+ }
+
+ th {
+     background-color: #cfcfcf;
+     font-weight: bold;
+ }
+
+ tr:nth-child(even) {
+     background-color: #b8b8b8;
+ }
+
+ tr:hover {
+     background-color: #dddddd;
+ }
+

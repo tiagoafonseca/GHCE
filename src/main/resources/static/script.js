@@ -13,7 +13,13 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
             const response = await fetch('http://localhost:8080/api/upload', {method: 'POST', body: formData});
 
             if (response.ok) {
-                const result = await response.json();
+                const result = fetch('http://localhost:8080/api/json')  // Fetch the JSON from the Spring Boot endpoint
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();  // Parse the JSON response
+                    })
                 console.log(result); // Verifica o formato dos dados
                 responseMessage.innerHTML = `<p style="color:black;">Horário Carregado com sucesso!</p>`;
                 renderTable(result)  //Construir a tabela
