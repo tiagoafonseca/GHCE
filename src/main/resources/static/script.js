@@ -13,20 +13,16 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
             const response = await fetch('http://localhost:8080/api/upload', {method: 'POST', body: formData});
 
             if (response.ok) {
-                const result = fetch('http://localhost:8080/api/json')  // Fetch the JSON from the Spring Boot endpoint
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();  // Parse the JSON response
-                    })
-                console.log(result); // Verifica o formato dos dados
+                const responseData = await fetch('http://localhost:8080/api/json');  // Fetch the JSON from the Spring Boot endpoint
+                const jsonResponse = await responseData.json();
+                console.log(jsonResponse); // Verifica o formato dos dados
                 responseMessage.innerHTML = `<p style="color:black;">Horário Carregado com sucesso!</p>`;
-                renderTable(result)  //Construir a tabela
+                renderTable(jsonResponse)  //Construir a tabela
             } else {
                 const errorText = await response.text();
                 responseMessage.innerHTML = `<p style="color:red;">Erro ao processar o arquivo: ${errorText}</p>`;
             }
+
         } catch (error) {
             console.error('Erro:', error);
             responseMessage.innerHTML = `<p style="color:red;">Erro ao enviar o arquivo. Verifique a conexão com o servidor.</p>`;
@@ -44,12 +40,14 @@ function renderTable(data) {
 
     tableHeader.innerHTML = "";
     tableBody.innerHTML = "";
-
-    if (data.length > 0) {
+    console.log("First Checkpoint")
+    console.log(data)
         // Cria os cabeçalhos da tabela
+        const headers2=["Curso","Unidade de Execução","Turno","Turma","Inscritos no Turno","Dia da Semana","Início","Fim","Dia","Caracteristicas da Sala Pedida","Sala de Aula","Lotação","Caracteristicas Reais da Sala Pedida"]
         const headers = Object.keys(data[0]); // Pega os nomes das colunas
+        console.log("Headers  "+headers)
         const headerRow = document.createElement('tr');
-        headers.forEach(header => {
+        headers2.forEach(header => {
             const th = document.createElement('th');
             th.textContent = header; // Adiciona os cabeçalhos das colunas
             headerRow.appendChild(th);
@@ -57,7 +55,9 @@ function renderTable(data) {
         tableHeader.appendChild(headerRow);
 
         // Cria as linhas da tabela
-        data.forEach(row => {
+    let firstTime=false
+    data.forEach(row => {
+        if(firstTime) {
             const tr = document.createElement('tr');
             headers.forEach(header => {
                 const td = document.createElement('td');
@@ -65,8 +65,10 @@ function renderTable(data) {
                 tr.appendChild(td);
             });
             tableBody.appendChild(tr);
+        }
+         firstTime=true;
         });
-    }
+
 }
 
 
