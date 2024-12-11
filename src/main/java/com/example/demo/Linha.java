@@ -194,7 +194,19 @@ public class Linha {
             this.lotação = new String[]{};
         }}
 
+
+    public String replaceVirgula(String s){
+        return s.replace(","," ");
+    }
+
+
     public void setCaracteristicasReais(String caracteristicasReais) {
+        caracteristicasReais=caracteristicasReais.replace(",,,,,,,,,,,,,,,,,,,","");
+        caracteristicasReais=caracteristicasReais.replace(",,,,,,,,,","");
+        caracteristicasReais=caracteristicasReais.replace(",,","");
+        caracteristicasReais=caracteristicasReais.replace(",,,,","");
+        caracteristicasReais=caracteristicasReais.replace(","," ");
+        caracteristicasReais=replaceVirgula(caracteristicasReais);
         if(caracteristicasReais!=null)
             this.caracteristicasReais = filtroArrayOrItem(caracteristicasReais);
         else{
