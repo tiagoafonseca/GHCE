@@ -19,32 +19,6 @@ public class FileUploadController {
 
    static File ficheiro;
 
-    @PostMapping("/upload1")
-    public List<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile file) {
-        List<Map<String, String>> horarios = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            String headerLine = reader.readLine(); // Lê a primeira linha (cabeçalho)
-            if (headerLine == null) {
-                throw new RuntimeException("Arquivo vazio");
-            }
-            String[] headers = headerLine.split(","); // Divide os cabeçalhos por vírgulas
-
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                String[] valores = linha.split(",");
-                Map<String, String> horario = new HashMap<>();
-                for (int i = 0; i < headers.length; i++) {
-                    horario.put(headers[i], valores[i]);
-                }
-                horarios.add(horario);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao processar o arquivo: " + e.getMessage());
-        }
-
-        return horarios; // Retorna os dados como JSON
-    }
 
     @PostMapping("/upload")
     public ResponseEntity readFileAndCreateJsons(@RequestParam("file") MultipartFile file) throws IOException {
@@ -144,7 +118,7 @@ public class FileUploadController {
                 linhaNew.setCaracteristicasDaSalaPedidaParaAula(null);
             }
         }catch (Exception e){
-            return new Linha();
+            return linhaNew;
         }
         System.out.println(linhaNew.toString());
         return linhaNew;
