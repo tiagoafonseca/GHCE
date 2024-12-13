@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 @RestController
@@ -18,6 +19,9 @@ import java.util.*;
 public class FileUploadController {
 
    static File ficheiro;
+   ArrayList<File> files=new ArrayList<>();
+
+
 
 
     @PostMapping("/upload")
