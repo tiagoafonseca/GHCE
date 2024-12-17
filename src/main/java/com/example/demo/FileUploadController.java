@@ -125,6 +125,46 @@ public class FileUploadController {
         }
     }
 
+    private int countAulasSemSala(List<Map<String, Object>> horarioList, List<Map<String, Object>> caracterizacaoList) {
+        Set<String> nomesDasSalas = new HashSet<>();
+
+        // Coletar os nomes de salas existentes
+        for (Map<String, Object> sala : caracterizacaoList) {
+            String nomeSala = (String) sala.get("Nome sala");
+            if (nomeSala != null) {
+                nomesDasSalas.add(nomeSala.trim());
+            }
+        }
+
+        // Contar aulas sem sala atribuída
+        int aulasSemSala = 0;
+        for (Map<String, Object> aula : horarioList) {
+            List<String> salaDaAula = (List<String>) aula.get("salaDaAula");
+
+            if (salaDaAula == null || salaDaAula.isEmpty() || !nomesDasSalas.contains(salaDaAula.get(0).trim())) {
+                aulasSemSala++;
+            }
+        }
+
+        System.out.println("Aulas sem sala atribuída: " + aulasSemSala);
+        return aulasSemSala;
+    }
+
+
+    private int calcularPontuacao(int aulasSobrelotacao, int aulasSemSala) {
+        int pontuacao = 100;
+
+        // Perde 1 ponto a cada 5 aulas em sobrelotação
+        pontuacao -= aulasSobrelotacao / 5;
+
+        // Perde 1 ponto a cada 5 aulas sem sala atribuída
+        pontuacao -= aulasSemSala / 5;
+
+        // Garantir que a pontuação não seja negativa
+        return Math.max(pontuacao, 0);
+    }
+
+
 
 
     @GetMapping("/evaluateOvercrowding")
@@ -137,12 +177,12 @@ public class FileUploadController {
         }
 
         try {
-            // Ler os arquivos JSON
             ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, Object>> horarioList = objectMapper.readValue(horarioFile, List.class);
             List<Map<String, Object>> caracterizacaoList = objectMapper.readValue(caracterizacaoFile, List.class);
 
-            // Mapeamento de capacidade máxima por sala
+            // Cálculo de aulas em sobrelotação
+            int aulasSobrelotacao = 0;
             Map<String, Integer> capacidadeSalas = new HashMap<>();
             for (Map<String, Object> sala : caracterizacaoList) {
                 String nomeSala = (String) sala.get("Nome sala");
@@ -150,14 +190,9 @@ public class FileUploadController {
                 if (nomeSala != null && capacidadeStr != null) {
                     try {
                         capacidadeSalas.put(nomeSala, Integer.parseInt(capacidadeStr));
-                    } catch (NumberFormatException e) {
-                        System.err.println("Capacidade inválida para a sala: " + nomeSala);
-                    }
+                    } catch (NumberFormatException ignored) {}
                 }
             }
-
-            // Identificar aulas em sobrelotação
-            int aulasSobrelotacao = 0;
             for (Map<String, Object> aula : horarioList) {
                 List<String> salaDaAula = (List<String>) aula.get("salaDaAula");
                 List<String> lotacaoStr = (List<String>) aula.get("lotação");
@@ -166,27 +201,23 @@ public class FileUploadController {
                     String sala = salaDaAula.get(0);
                     try {
                         int lotacao = Integer.parseInt(lotacaoStr.get(0));
-                        Integer capacidadeMaxima = capacidadeSalas.get(sala);
-
-                        if (capacidadeMaxima != null && lotacao > capacidadeMaxima) {
+                        if (capacidadeSalas.containsKey(sala) && lotacao > capacidadeSalas.get(sala)) {
                             aulasSobrelotacao++;
-                            System.out.println("Sobrelotação detectada: Sala " + sala + " - Lotação " + lotacao + "/" + capacidadeMaxima);
                         }
-                    } catch (NumberFormatException e) {
-                        System.err.println("Lotação inválida para a aula na sala: " + sala);
-                    }
+                    } catch (NumberFormatException ignored) {}
                 }
             }
 
-            // Cálculo da pontuação: 1 ponto perdido a cada 5 aulas em sobrelotação
-            int pontuacao = 100 - (aulasSobrelotacao / 5);
-            if (pontuacao < 0) pontuacao = 0; // Garantir que a pontuação não seja negativa
+            // Cálculo de aulas sem sala atribuída
+            int aulasSemSala = countAulasSemSala(horarioList, caracterizacaoList);
 
-            // Atualizar a variável de classe
-            horarioPontuacao = pontuacao;
+            // Cálculo final da pontuação
+            horarioPontuacao = calcularPontuacao(aulasSobrelotacao, aulasSemSala);
 
-            // Resultado
-            String resultado = "Aulas em sobrelotação: " + aulasSobrelotacao + "\nPontuação do horário: " + pontuacao;
+            String resultado = "Aulas em sobrelotação: " + aulasSobrelotacao +
+                    "\nAulas sem sala atribuída: " + aulasSemSala +
+                    "\nPontuação do horário: " + horarioPontuacao;
+
             System.out.println(resultado);
             return ResponseEntity.ok(resultado);
 
@@ -194,6 +225,11 @@ public class FileUploadController {
             return ResponseEntity.status(500).body("Erro ao processar os arquivos JSON: " + e.getMessage());
         }
     }
+
+
+
+
+
 
 
     @GetMapping("/horarioPontuacao")
