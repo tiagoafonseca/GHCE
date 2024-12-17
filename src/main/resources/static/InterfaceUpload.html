@@ -30,10 +30,23 @@
     <div class="scheduelePointsDiv">
         <p>Qualidade do Horário:</p>
         <p id="scheduleQuality">A calcular...</p>
+
+        <div>
+            <label>
+                <input type="checkbox" id="metricOvercrowding" checked>
+                Incluir Aulas em Sobrelotação
+            </label>
+            <label>
+                <input type="checkbox" id="metricNoRoom" checked>
+                Incluir Aulas sem Sala Atribuída
+            </label>
+        </div>
+
         <div class="wrapper">
             <button id="recalculateQualityButton">Recalcular Qualidade</button>
         </div>
     </div>
+
 
 
     <div class="textBox">

@@ -90,4 +90,24 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
 };
 
 // Adicionar evento ao botão "Recalcular Qualidade"
-document.getElementById('recalculateQualityButton').addEventListener('click', fetchScheduleQuality);
+document.getElementById('recalculateQualityButton').addEventListener('click', async () => {
+    // Obter o estado das checkboxes
+    const includeOvercrowding = document.getElementById('metricOvercrowding').checked;
+    const includeNoRoom = document.getElementById('metricNoRoom').checked;
+
+    try {
+        // Enviar as opções para o backend
+        const response = await fetch(`http://localhost:8080/api/evaluateOvercrowding?overcrowding=${includeOvercrowding}&noRoom=${includeNoRoom}`);
+
+        if (response.ok) {
+            const quality = await response.json();
+            document.getElementById('scheduleQuality').textContent = `${quality} pontos`; // Atualiza o HTML
+        } else {
+            document.getElementById('scheduleQuality').textContent = "Erro ao recalcular qualidade.";
+        }
+    } catch (error) {
+        console.error('Erro ao recalcular a pontuação:', error);
+        document.getElementById('scheduleQuality').textContent = "Erro ao recalcular qualidade.";
+    }
+});
+

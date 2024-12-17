@@ -67,16 +67,22 @@ public class FileUploadController {
                     .body("Erro ao converter json.txt para .json: " + conversionResponse.getBody());
         }
 
-        // 2. Avaliar sobrelotação
-        ResponseEntity<String> overcrowdingResponse = evaluateOvercrowding();
+        // 2. Avaliar sobrelotação (usando valores padrão true para as métricas)
+        ResponseEntity<Integer> overcrowdingResponse = evaluateOvercrowding(true, true);
         if (!overcrowdingResponse.getStatusCode().is2xxSuccessful()) {
             return ResponseEntity.status(overcrowdingResponse.getStatusCode())
-                    .body("Erro ao avaliar sobrelotação: " + overcrowdingResponse.getBody());
+                    .body("Erro ao avaliar sobrelotação.");
         }
+
+// Atualizar pontuação do horário
+        int pontuacao = overcrowdingResponse.getBody();
+        System.out.println("Pontuação calculada: " + pontuacao);
+
 
         // 3. Informar que a operação foi concluída com sucesso
         return ResponseEntity.ok("Upload processado com sucesso. Conversão e avaliação realizadas.");
     }
+
 
 
 
@@ -168,12 +174,15 @@ public class FileUploadController {
 
 
     @GetMapping("/evaluateOvercrowding")
-    public ResponseEntity<String> evaluateOvercrowding() {
+    public ResponseEntity<Integer> evaluateOvercrowding(
+            @RequestParam(defaultValue = "true") boolean overcrowding,
+            @RequestParam(defaultValue = "true") boolean noRoom) {
+
         File horarioFile = new File("./horario.json");
         File caracterizacaoFile = new File("./caracterizacao.json");
 
         if (!horarioFile.exists() || !caracterizacaoFile.exists()) {
-            return ResponseEntity.status(404).body("Um ou ambos os arquivos JSON não foram encontrados.");
+            return ResponseEntity.status(404).body(-1);
         }
 
         try {
@@ -181,50 +190,51 @@ public class FileUploadController {
             List<Map<String, Object>> horarioList = objectMapper.readValue(horarioFile, List.class);
             List<Map<String, Object>> caracterizacaoList = objectMapper.readValue(caracterizacaoFile, List.class);
 
-            // Cálculo de aulas em sobrelotação
             int aulasSobrelotacao = 0;
-            Map<String, Integer> capacidadeSalas = new HashMap<>();
-            for (Map<String, Object> sala : caracterizacaoList) {
-                String nomeSala = (String) sala.get("Nome sala");
-                String capacidadeStr = (String) sala.get("Capacidade Normal");
-                if (nomeSala != null && capacidadeStr != null) {
-                    try {
-                        capacidadeSalas.put(nomeSala, Integer.parseInt(capacidadeStr));
-                    } catch (NumberFormatException ignored) {}
+            int aulasSemSala = 0;
+
+            // Calcular aulas em sobrelotação
+            if (overcrowding) {
+                Map<String, Integer> capacidadeSalas = new HashMap<>();
+                for (Map<String, Object> sala : caracterizacaoList) {
+                    String nomeSala = (String) sala.get("Nome sala");
+                    String capacidadeStr = (String) sala.get("Capacidade Normal");
+                    if (nomeSala != null && capacidadeStr != null) {
+                        try {
+                            capacidadeSalas.put(nomeSala, Integer.parseInt(capacidadeStr));
+                        } catch (NumberFormatException ignored) {}
+                    }
+                }
+                for (Map<String, Object> aula : horarioList) {
+                    List<String> salaDaAula = (List<String>) aula.get("salaDaAula");
+                    List<String> lotacaoStr = (List<String>) aula.get("lotação");
+
+                    if (salaDaAula != null && !salaDaAula.isEmpty() && lotacaoStr != null && !lotacaoStr.isEmpty()) {
+                        String sala = salaDaAula.get(0);
+                        try {
+                            int lotacao = Integer.parseInt(lotacaoStr.get(0));
+                            if (capacidadeSalas.containsKey(sala) && lotacao > capacidadeSalas.get(sala)) {
+                                aulasSobrelotacao++;
+                            }
+                        } catch (NumberFormatException ignored) {}
+                    }
                 }
             }
-            for (Map<String, Object> aula : horarioList) {
-                List<String> salaDaAula = (List<String>) aula.get("salaDaAula");
-                List<String> lotacaoStr = (List<String>) aula.get("lotação");
 
-                if (salaDaAula != null && !salaDaAula.isEmpty() && lotacaoStr != null && !lotacaoStr.isEmpty()) {
-                    String sala = salaDaAula.get(0);
-                    try {
-                        int lotacao = Integer.parseInt(lotacaoStr.get(0));
-                        if (capacidadeSalas.containsKey(sala) && lotacao > capacidadeSalas.get(sala)) {
-                            aulasSobrelotacao++;
-                        }
-                    } catch (NumberFormatException ignored) {}
-                }
+            // Calcular aulas sem sala atribuída
+            if (noRoom) {
+                aulasSemSala = countAulasSemSala(horarioList, caracterizacaoList);
             }
 
-            // Cálculo de aulas sem sala atribuída
-            int aulasSemSala = countAulasSemSala(horarioList, caracterizacaoList);
-
-            // Cálculo final da pontuação
+            // Calcular pontuação
             horarioPontuacao = calcularPontuacao(aulasSobrelotacao, aulasSemSala);
-
-            String resultado = "Aulas em sobrelotação: " + aulasSobrelotacao +
-                    "\nAulas sem sala atribuída: " + aulasSemSala +
-                    "\nPontuação do horário: " + horarioPontuacao;
-
-            System.out.println(resultado);
-            return ResponseEntity.ok(resultado);
+            return ResponseEntity.ok(horarioPontuacao);
 
         } catch (IOException e) {
-            return ResponseEntity.status(500).body("Erro ao processar os arquivos JSON: " + e.getMessage());
+            return ResponseEntity.status(500).body(-1);
         }
     }
+
 
 
 
