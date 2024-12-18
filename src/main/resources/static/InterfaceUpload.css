@@ -67,6 +67,7 @@ body {
 
 .upload-container button:hover {
     background-color: #0056b3;
+    transition: 0.3s;
 }
 
  table {
@@ -165,6 +166,7 @@ body {
      transition: 0.5s;
      border-radius: 4rem;
      color: white;
+     transition: 0.3s;
  }
 
 

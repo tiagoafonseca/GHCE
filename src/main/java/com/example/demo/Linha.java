@@ -181,6 +181,10 @@ public class Linha {
         }}
 
     public void setSalaDaAula(String salaDaAula) {
+        if(Character.isDigit(salaDaAula.charAt(0))){
+            this.salaDaAula = filtroArrayOrItem("--SalaNãoAtribuída--");
+            return;
+        }
         if(salaDaAula!=null)
             this.salaDaAula = filtroArrayOrItem(salaDaAula);
         else{

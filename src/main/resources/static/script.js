@@ -59,13 +59,15 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
     const responseMessage = document.getElementById('responseMessage');
+    //const nome = document.getElementById("word").value
+
 
     if (file) {
         const formData = new FormData();
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: formData });
+            const response = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: formData, });
 
             if (response.ok) {
                 const responseData = await fetch('http://localhost:8080/api/json'); // Fetch the JSON from the Spring Boot endpoint

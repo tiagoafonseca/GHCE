@@ -160,14 +160,14 @@ public class FileUploadController {
     private int calcularPontuacao(int aulasSobrelotacao, int aulasSemSala) {
         int pontuacao = 100;
 
-        // Perde 1 ponto a cada 5 aulas em sobrelotação
-        pontuacao -= aulasSobrelotacao / 5;
+        // Perde 1 ponto a cada 185 aulas em sobrelotação
+        pontuacao -= aulasSobrelotacao / 185;
 
-        // Perde 1 ponto a cada 5 aulas sem sala atribuída
-        pontuacao -= aulasSemSala / 5;
+        // Perde 1 ponto a cada 185 aulas sem sala atribuída
+        pontuacao -= aulasSemSala / 185;
 
-        // Garantir que a pontuação não seja negativa
-        return Math.max(pontuacao, 0);
+        // Garantir que a pontuaçã o não seja negativa
+        return pontuacao;
     }
 
 
