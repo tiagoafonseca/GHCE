@@ -126,9 +126,16 @@ body {
  .buttonsDiv{
      display: flex;
      flex-direction: row;
-     justify-content: space-between;
+     justify-content: center;
 
      width: 80%;
+ }
+
+ .checkBoxs{
+     display: flex;
+     justify-content: center;
+     align-items: end;
+     flex-direction: column;
  }
 
  .scheduelePointsDiv{

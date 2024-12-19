@@ -24,14 +24,16 @@
 <!-- Adicionar a tabela aqui -->
 <h2>Horários Processados</h2>
 <div class="buttonsDiv">
-        <div class="wrapper">
-            <button>Carregar Novo Horário</button>
-        </div>
+
     <div class="scheduelePointsDiv">
+        <div class="wrapper">
+            <button id="recalculateQualityButton">Recalcular Qualidade</button>
+        </div>
+
         <p>Qualidade do Horário:</p>
         <p id="scheduleQuality">A calcular...</p>
 
-        <div>
+        <div class="checkBoxs">
             <label>
                 <input type="checkbox" id="metricOvercrowding" checked>
                 Incluir Aulas em Sobrelotação
@@ -42,9 +44,7 @@
             </label>
         </div>
 
-        <div class="wrapper">
-            <button id="recalculateQualityButton">Recalcular Qualidade</button>
-        </div>
+
     </div>
 
 
