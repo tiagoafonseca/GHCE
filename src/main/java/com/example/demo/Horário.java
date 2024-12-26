@@ -11,21 +11,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Horário {
-    String fileLocation;
     String date;
     String name;
     File listaHorarios;
+    Metricas qualidade;
 
-
-    Horário(String location, String name){
-        fileLocation = location;
+    Horário(String name){
         this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         this.name = name;
         listaHorarios=new File("ListaHorarios.json");
     }
 
     Horário(String location, String name,String date){
-        fileLocation = location;
+
         this.date=date;
         this.name = name;
         listaHorarios=new File("ListaHorarios.json");

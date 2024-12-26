@@ -38,7 +38,7 @@ public class Linha {
     }
 
 
-    Linha() {
+    public Linha() {
     }
 
     String[] filtroArrayOrItem(String valorRaw){

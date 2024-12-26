@@ -1,7 +1,7 @@
 // Função para buscar a pontuação do horário
 async function fetchScheduleQuality() {
     try {
-        const response = await fetch('http://localhost:8080/api/horarioPontuacao');
+        const response = await fetch('http://localhost:8080/api1/horarioPontuacao');
         if (response.ok) {
             const quality = await response.json();
             document.getElementById('scheduleQuality').textContent = `${quality} pontos`; // Atualiza o HTML
@@ -59,15 +59,15 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
     const responseMessage = document.getElementById('responseMessage');
-    //const nome = document.getElementById("word").value
+    const nome = document.getElementById("nomeHorario").value
 
 
     if (file) {
         const formData = new FormData();
         formData.append('file', file);
-
+        formData.append('nome',nome)
         try {
-            const response = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: formData, });
+            const response = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: formData });
 
             if (response.ok) {
                 const responseData = await fetch('http://localhost:8080/api/json'); // Fetch the JSON from the Spring Boot endpoint
@@ -87,7 +87,7 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
             responseMessage.innerHTML = `<p style="color:red;">Erro ao enviar o arquivo. Verifique a conexão com o servidor.</p>`;
         }
     } else {
-        alert('Por favor, selecione um arquivo.');
+        alert('Arquivo e nome são campos obrigatorios.');
     }
 };
 
