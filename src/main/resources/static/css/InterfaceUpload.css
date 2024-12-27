@@ -11,6 +11,13 @@ body {
 
 }
 
+ .bigWrapper{
+     display: flex;
+     flex-direction: row;
+    background-color: red;
+ }
+
+
 /* Caixa do formulário */
 .upload-container {
     background-color: #fff;
@@ -24,9 +31,32 @@ body {
     flex-direction: column;
     width: 100%;
     display: flex;
+    margin: 10px;
 }
 
-/* Estilo do título */
+.bigWrapperDeButoes{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    width: 100%;
+}
+
+ .bigWrapperDeButoes button{
+     margin: 0;
+     background-color: lightgrey;
+     border: none;
+     font-weight: normal;
+     transition: 0.5s;
+ }
+
+ .bigWrapperDeButoes button:hover{
+     background-color: white;
+     transition: 0.5s;
+
+ }
+
+
+ /* Estilo do título */
 .upload-container h2 {
     color: #333;
     margin-bottom: 1em;
@@ -65,10 +95,31 @@ body {
     transition: background-color 0.3s;
 }
 
+.upload-container1{
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    display: flex;
+    margin: 10px;
+}
+
+ .upload-container1 button{
+     padding: 0.8em 1em;
+ }
+
 .upload-container button:hover {
     background-color: #0056b3;
     transition: 0.3s;
 }
+
+
 
  table {
      width: 80%;
@@ -143,10 +194,9 @@ body {
      gap: 10px;
  }
 
- button{
+ buttonMerdas{
      border: none;
      border-radius: 1.2rem;
-
      background-color: #007bff;
      color: white;
      font-weight: bold;
@@ -159,8 +209,23 @@ body {
     padding:10px;
  }
 
+ .butoes{
+     gap: 10px;
+     display: flex;
+     margin-top:1em;
+     width: 100%;
+     justify-content: center;
 
- button:hover{
+ }
+
+ .butoes button{
+     width: 50%;
+     padding: 0.4em 1em;
+     font-size:0.95rem;
+ }
+
+
+ buttonMerdas:hover{
 
      background-color: #0069da;
      transition: 0.5s;
@@ -176,7 +241,7 @@ body {
 
  }
 
- .textBox textarea{
+ textarea{
     resize: none;
  }
 

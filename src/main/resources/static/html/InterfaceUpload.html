@@ -7,19 +7,43 @@
     <link rel="stylesheet" href="../css/InterfaceUpload.css">
 </head>
 <body>
-<h1>Bem-vindo ao meu Gestor de Horários!</h1>
-<p>Esta é uma página HTML servida pelo Spring Boot.</p>
+<h1>Bem-vindo ao Gestor de Horários!</h1>
 
-<div class="upload-container">
-    <h2>Carregar Horário</h2>
-    <form id="uploadForm">
-        <!-- <label for="scheduleFile">Escolha um arquivo CSV:</label> -->
-        <p>Nome do horário:</p>
-        <textarea id="nomeHorario"></textarea>
-        <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
-        <button type="submit">Carregar</button>
-    </form>
-
+<div class="bigWrapper">
+<div class="upload-container1">
+    <h2>Filtros Selecionados</h2>
+    <div class="bigWrapperDeButoes">
+        <button>Gravidas</button>
+        <button>Gordas</button>
+        <button>Milfs</button>
+        <button>Zebras</button>
+        <button>Lesbicas</button>
+        <div class="butoes">
+            <button type="submit">Filtrar</button>
+            <button type="submit">Recalcular Qualidade</button>
+        </div>
+    </div>
+</div>
+    <div class="upload-container">
+        <h2>Carregar Novo Horário</h2>
+        <form id="uploadForm">
+            <!-- <label for="scheduleFile">Escolha um arquivo CSV:</label> -->
+            <p>Nome do horário:</p>
+            <textarea id="nomeHorario"></textarea>
+            <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
+            <button type="submit">Carregar</button>
+        </form>
+    </div>
+    <div class="upload-container">
+        <h2>Carregar Novo Horário</h2>
+        <form id="uploadForm">
+            <!-- <label for="scheduleFile">Escolha um arquivo CSV:</label> -->
+            <p>Nome do horário:</p>
+            <textarea id="nomeHorario"></textarea>
+            <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
+            <button type="submit">Carregar</button>
+        </form>
+    </div>
 </div>
 <div id="responseMessage"></div>
 
