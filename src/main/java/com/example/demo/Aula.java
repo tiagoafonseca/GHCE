@@ -1,9 +1,8 @@
 package com.example.demo;
 
-import java.awt.*;
 import java.util.Arrays;
 
-public class Linha {
+public class Aula {
     String[] curso;
     String[] unidadeDeExecucao;
     String[] turno;
@@ -19,7 +18,7 @@ public class Linha {
     String[] caracteristicasReais;
 
 
-    Linha(String[] curso, String[] unidadeDeExecucao, String[] turno, String[] turma, String[] inscritosNoTurno, String[] diaDaSemana,
+    Aula(String[] curso, String[] unidadeDeExecucao, String[] turno, String[] turma, String[] inscritosNoTurno, String[] diaDaSemana,
           String[] inicio, String[] fim, String[] dia, String[] caracteristicasDaSalaPedidaParaAula, String[] salaDaAula, String[] lotação, String[] caracteristicasReais) {
 
         this.curso = curso;
@@ -38,7 +37,7 @@ public class Linha {
     }
 
 
-    public Linha() {
+    public Aula() {
     }
 
     String[] filtroArrayOrItem(String valorRaw){

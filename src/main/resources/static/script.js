@@ -1,3 +1,50 @@
+// Lógica do formulário de upload
+document.getElementById('uploadForm').onsubmit = async (event) => {
+    event.preventDefault();
+
+    const fileInput = document.getElementById('csvFile');
+    const file = fileInput.files[0];
+    const responseMessage = document.getElementById('responseMessage');
+    const nome = document.getElementById("nomeHorario").value
+
+
+    if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('nome',nome)
+        try {
+            const qualidade = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: formData });
+
+            if (qualidade.ok) {
+                const pontos=await qualidade.json();
+                const responseData = await fetch('http://localhost:8080/api/json'); // Fetch the JSON from the Spring Boot endpoint
+                const jsonResponse = await responseData.json();
+                document.getElementById('scheduleQuality').textContent = `${pontos} pontos`;
+                console.log(jsonResponse); // Verifica o formato dos dados
+                console.log("qualidade"+pontos)
+                responseMessage.innerHTML = `<p style="color:black;">Horário Carregado com sucesso!</p>`;
+                renderTable(jsonResponse); // Construir a tabela
+
+                // Atualizar a qualidade do horário após o upload
+                //fetchScheduleQuality();
+            } else {
+                const errorText = await response.text();
+                responseMessage.innerHTML = `<p style="color:red;">Erro ao processar o arquivo: ${errorText}</p>`;
+                document.getElementById('scheduleQuality').textContent = "Erro ao obter qualidade.";
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            responseMessage.innerHTML = `<p style="color:red;">Erro ao enviar o arquivo. Verifique a conexão com o servidor.</p>`;
+            document.getElementById('scheduleQuality').textContent = "Erro ao obter qualidade.";
+        }
+    } else {
+        alert('Arquivo e nome são campos obrigatorios.');
+    }
+};
+
+
+
+
 // Função para buscar a pontuação do horário
 async function fetchScheduleQuality() {
     try {
@@ -52,44 +99,7 @@ function renderTable(data) {
     });
 }
 
-// Lógica do formulário de upload
-document.getElementById('uploadForm').onsubmit = async (event) => {
-    event.preventDefault();
 
-    const fileInput = document.getElementById('csvFile');
-    const file = fileInput.files[0];
-    const responseMessage = document.getElementById('responseMessage');
-    const nome = document.getElementById("nomeHorario").value
-
-
-    if (file) {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('nome',nome)
-        try {
-            const response = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: formData });
-
-            if (response.ok) {
-                const responseData = await fetch('http://localhost:8080/api/json'); // Fetch the JSON from the Spring Boot endpoint
-                const jsonResponse = await responseData.json();
-                console.log(jsonResponse); // Verifica o formato dos dados
-                responseMessage.innerHTML = `<p style="color:black;">Horário Carregado com sucesso!</p>`;
-                renderTable(jsonResponse); // Construir a tabela
-
-                // Atualizar a qualidade do horário após o upload
-                fetchScheduleQuality();
-            } else {
-                const errorText = await response.text();
-                responseMessage.innerHTML = `<p style="color:red;">Erro ao processar o arquivo: ${errorText}</p>`;
-            }
-        } catch (error) {
-            console.error('Erro:', error);
-            responseMessage.innerHTML = `<p style="color:red;">Erro ao enviar o arquivo. Verifique a conexão com o servidor.</p>`;
-        }
-    } else {
-        alert('Arquivo e nome são campos obrigatorios.');
-    }
-};
 
 // Adicionar evento ao botão "Recalcular Qualidade"
 document.getElementById('recalculateQualityButton').addEventListener('click', async () => {

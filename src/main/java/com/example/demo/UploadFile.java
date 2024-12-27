@@ -21,7 +21,7 @@ public class UploadFile {
     @PostMapping("/upload")
     public ResponseEntity<String> readFileAndCreateJsons(@RequestParam("file") MultipartFile file, @RequestParam("nome") String name) throws IOException {
         System.out.println("NOME:"+name);
-        List<Linha> linhasObj = new ArrayList<>();
+        List<Aula> linhasObj = new ArrayList<>();
         List<String> linhas = new ArrayList<>();
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         File myObj = new File("./aulas.json");
@@ -62,7 +62,7 @@ public class UploadFile {
 
 
 
-        return ResponseEntity.ok("Sucess");
+        return ResponseEntity.ok(String.valueOf(pontuacao));
     }
 
 
@@ -90,10 +90,10 @@ public class UploadFile {
 
 
         //refazer
-        Linha buildLinhaObj(String linha) {
+        Aula buildLinhaObj(String linha) {
         String[] valoresRaw = linha.split(";");
         String[] valores= new String[valoresRaw.length];
-        Linha linhaNew = new Linha();
+        Aula linhaNew = new Aula();
         try {
             if (valoresRaw.length == 13) {
                 linhaNew.setCurso(valoresRaw[0]);
