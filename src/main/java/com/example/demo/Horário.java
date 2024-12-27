@@ -19,15 +19,25 @@ public class Horário {
     Horário(String name){
         this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         this.name = name;
-        listaHorarios=new File("ListaHorarios.json");
+        listaHorarios=new File("jsonHorarios/"+this.name+".json");
     }
 
     Horário(String location, String name,String date){
-
         this.date=date;
         this.name = name;
         listaHorarios=new File("ListaHorarios.json");
     }
+
+    public void loadMetricas(){
+
+
+
+    }
+
+
+
+
+
 
     public void writeMySelf() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
