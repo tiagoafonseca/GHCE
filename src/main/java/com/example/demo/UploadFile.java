@@ -89,6 +89,8 @@ public class UploadFile {
 
 
 
+
+
         //refazer
         Aula buildLinhaObj(String linha) {
         String[] valoresRaw = linha.split(";");

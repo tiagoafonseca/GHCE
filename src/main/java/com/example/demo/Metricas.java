@@ -17,13 +17,14 @@ import java.util.*;
 @RequestMapping("/api1")
 public class Metricas {
 
+    List<Sala> salas;
     private int horarioPontuacao = -1;
     private int aulasEmSobreLotação;
     private int aulasSemSala;
 
 
     @PostConstruct
-    public void runProcessCaracterizacaoSalas() {
+    public void runProcessCaracterizacaoSalas() throws IOException {
         processCaracterizacaoSalas();
     }
 
@@ -38,10 +39,10 @@ public class Metricas {
 
     //Refazer
     @GetMapping("/processCaracterizacao")
-    public ResponseEntity<String> processCaracterizacaoSalas() {
+    public ResponseEntity<String> processCaracterizacaoSalas() throws IOException {
         File caracterizacaoFile = new File("./caracterizacao.json");
         if(caracterizacaoFile.exists()){
-            return ResponseEntity.ok("Sucess");
+            salas=Sala.lerFicheiro("./caracterizacao.json");
         }
 
 
