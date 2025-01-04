@@ -43,6 +43,7 @@ public class Metricas {
         File caracterizacaoFile = new File("./caracterizacao.json");
         if(caracterizacaoFile.exists()){
             salas=Sala.lerFicheiro("./caracterizacao.json");
+            System.out.println("Foram carregadas: "+salas.size()+" salas");
         }
 
 
