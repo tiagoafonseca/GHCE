@@ -5,7 +5,7 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
     let tableHeader = document.getElementById('tableHeader');
     let tableBody = document.getElementById('tableBody');
     let data="";
-    let currentSection=0;
+    this.currentSection=0;
     let lastSection=0;
 
 
@@ -99,11 +99,22 @@ function determineLastSection(){
     console.log(this.lastSection);
 }
 
+
+
 function nextPage(){
     if(this.currentSection!=this.lastSection){
         this.currentSection++;
         runSection(this.currentSection);
     }
+    console.log(this.currentSection)
+}
+
+function backPage(){
+    if(this.currentSection!=0){
+        this.currentSection--;
+        runSection(this.currentSection);
+    }
+    console.log(this.currentSection)
 }
 
 
@@ -127,7 +138,7 @@ function runSection(section){
 
 function clearCurrentTable(){
     tableBody.innerHTML = "";
-    console.log("aqui");
+    console.log("Limpei");
 }
 
 
