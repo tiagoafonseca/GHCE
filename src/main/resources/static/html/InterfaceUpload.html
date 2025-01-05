@@ -20,7 +20,7 @@
         <button>Lesbicas</button>
         <div class="butoes">
             <button type="submit">Filtrar Tabela</button>
-            <button type="submit">Recalcular Qualidade</button>
+            <button onclick="clearCurrentTable()">Recalcular Qualidade</button>
         </div>
     </div>
 </div>
@@ -50,27 +50,18 @@
 <!-- Adicionar a tabela aqui -->
 <h2>Horários Processados</h2>
 <div class="buttonsDiv">
-        <div class="wrapper">
-            <button>Carregar Novo Horário</button>
-        </div>
     <div class="scheduelePointsDiv">
         <p>Qualidade do Horário:</p>
         <p id="scheduleQuality">A calcular...</p>
-
-        <div>
-            <label>
-                <input type="checkbox" id="metricOvercrowding" checked>
-                Incluir Aulas em Sobrelotação
-            </label>
-            <label>
-                <input type="checkbox" id="metricNoRoom" checked>
-                Incluir Aulas sem Sala Atribuída
-            </label>
-        </div>
-
-        <div class="wrapper">
-            <button id="recalculateQualityButton">Recalcular Qualidade</button>
-        </div>
+    </div>
+    <div class="sectionWrapper">
+        <img src="../imgs/left-arrow.png">
+        <p>Page: </p>
+        <p id="currentSection" class="currentSectionCss">12</p>
+        <p>...</p>
+        <p>54</p>
+        <img src="../imgs/right-arrow.png">
+    </div>
     </div>
 
 

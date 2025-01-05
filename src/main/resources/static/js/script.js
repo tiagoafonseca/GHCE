@@ -2,6 +2,15 @@
 document.getElementById('uploadForm').onsubmit = async (event) => {
     event.preventDefault();
 
+    let tableHeader = document.getElementById('tableHeader');
+    let tableBody = document.getElementById('tableBody');
+    let data="";
+    let currentSection=0;
+    let lastSection=0;
+
+
+
+
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
     const responseMessage = document.getElementById('responseMessage');
@@ -23,7 +32,11 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
                 console.log(jsonResponse); // Verifica o formato dos dados
                 console.log("qualidade"+pontos)
                 responseMessage.innerHTML = `<p style="color:black;">Horário Carregado com sucesso!</p>`;
-                renderTable(jsonResponse); // Construir a tabela
+                this.data=jsonResponse;
+                //renderTable(jsonResponse); // Construir a tabela
+                determineLastSection();
+                renderHeaders();
+                runSection(0);
 
                 // Atualizar a qualidade do horário após o upload
                 //fetchScheduleQuality();
@@ -63,40 +76,58 @@ async function fetchScheduleQuality() {
 
 // Construção da Tabela
 function renderTable(data) {
-    const tableHeader = document.getElementById('tableHeader');
-    const tableBody = document.getElementById('tableBody');
 
-    tableHeader.innerHTML = "";
-    tableBody.innerHTML = "";
-    console.log("First Checkpoint")
-    console.log(data);
+}
 
-    // Cria os cabeçalhos da tabela
-    const headers2 = ["Curso", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida"];
-    const headers = Object.keys(data[0]); // Pega os nomes das colunas
+function renderHeaders(){
+    const headers = ["Curso", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida"];
     console.log("Headers  " + headers);
+
     const headerRow = document.createElement('tr');
-    headers2.forEach(header => {
+    headers.forEach(header => {
         const th = document.createElement('th');
         th.textContent = header; // Adiciona os cabeçalhos das colunas
         headerRow.appendChild(th);
     });
     tableHeader.appendChild(headerRow);
+    this.data=data.slice(1);
+}
 
-    // Cria as linhas da tabela
-    let firstTime = false;
-    data.forEach(row => {
-        if (firstTime) {
-            const tr = document.createElement('tr');
-            headers.forEach(header => {
-                const td = document.createElement('td');
-                td.textContent = row[header] || ""; // Preenche as células com os valores
-                tr.appendChild(td);
-            });
-            tableBody.appendChild(tr);
-        }
-        firstTime = true;
-    });
+
+function determineLastSection(){
+    this.lastSection=Math.ceil(this.data.length/500);
+    console.log(this.lastSection);
+}
+
+function nextPage(){
+    if(this.currentSection!=this.lastSection){
+        this.currentSection++;
+        runSection(this.currentSection);
+    }
+}
+
+
+
+
+function runSection(section){
+    clearCurrentTable();
+    for (let i = 1+(section*500); i < 500+(section*500); i++) {
+        console.log(data[i]);
+        const tr = document.createElement('tr');
+        Object.keys(data[i]).forEach(linha => {
+            const td = document.createElement('td');
+            td.textContent = data[i][linha] || ""; // Preenche as células com os valores
+            tr.appendChild(td);
+        });
+        tableBody.appendChild(tr);
+        console.log(i)
+    }
+
+}
+
+function clearCurrentTable(){
+    tableBody.innerHTML = "";
+    console.log("aqui");
 }
 
 

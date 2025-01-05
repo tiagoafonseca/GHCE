@@ -281,7 +281,35 @@ body {
  }
 
 
+.sectionWrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 
+.sectionWrapper img{
+    width: 15px;
+    height: 15px;
+    padding:10px;
+    border-radius: 50%;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+ .currentSectionCss{
+     font-weight:bold;
+     text-decoration: underline;
+     font-size: 1.1rem;
+ }
+
+ .sectionWrapper img:hover{
+    background-color: lightgreY;
+     transition: 0.5s;
+
+
+ }
 
 
  .headersHorarios{
