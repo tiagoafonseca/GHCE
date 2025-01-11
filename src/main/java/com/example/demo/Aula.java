@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.Arrays;
 
 public class Aula {
+    int id;
     String[] curso;
     String[] unidadeDeExecucao;
     String[] turno;
@@ -39,6 +40,16 @@ public class Aula {
 
     public Aula() {
     }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     String[] filtroArrayOrItem(String valorRaw){
         String dataFormatada[]=valorRaw.split("\\s+");

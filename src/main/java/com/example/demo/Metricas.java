@@ -3,6 +3,7 @@ package com.example.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,24 +17,50 @@ import java.util.*;
 @RestController
 @RequestMapping("/api1")
 public class Metricas {
-
+    String nomeFile;
     List<Sala> salas;
-    private int horarioPontuacao = -1;
-    private int aulasEmSobreLotação;
-    private int aulasSemSala;
+    public int horarioPontuacao = -1;
+    public int aulasEmSobreLotação;
+    public int aulasSemSala;
 
 
-    @PostConstruct
-    public void runProcessCaracterizacaoSalas() throws IOException {
-        processCaracterizacaoSalas();
+    public String getNomeFile() {
+        return nomeFile;
     }
 
-    @GetMapping("/horarioPontuacao")
-    public ResponseEntity<Integer> getHorarioPontuacao() {
-        if (horarioPontuacao == -1) {
-            return ResponseEntity.status(404).body(-1); // Retorna -1 se a pontuação ainda não foi calculada
-        }
-        return ResponseEntity.ok(horarioPontuacao);
+    public List<Sala> getSalas() {
+        return salas;
+    }
+
+    public void setSalas(List<Sala> salas) {
+        this.salas = salas;
+    }
+
+    public void setHorarioPontuacao(int horarioPontuacao) {
+        this.horarioPontuacao = horarioPontuacao;
+    }
+
+    public int getAulasEmSobreLotação() {
+        return aulasEmSobreLotação;
+    }
+
+    public void setAulasEmSobreLotação(int aulasEmSobreLotação) {
+        this.aulasEmSobreLotação = aulasEmSobreLotação;
+    }
+
+    public int getAulasSemSala() {
+        return aulasSemSala;
+    }
+
+    public void setAulasSemSala(int aulasSemSala) {
+        this.aulasSemSala = aulasSemSala;
+    }
+
+    Metricas(){
+    }
+
+    void setNomeFile(String s){
+        nomeFile = "./Horários/"+s+".json";
     }
 
 
@@ -134,7 +161,8 @@ public class Metricas {
             @RequestParam(defaultValue = "true") boolean overcrowding,
             @RequestParam(defaultValue = "true") boolean noRoom) {
 
-        File horarioFile = new File("./aulas.json");
+        File horarioFile = new File(nomeFile);
+        System.out.println(nomeFile);
         File caracterizacaoFile = new File("./caracterizacao.json");
 
         if (!horarioFile.exists() || !caracterizacaoFile.exists()) {
@@ -184,6 +212,7 @@ public class Metricas {
 
             // Calcular pontuação
             horarioPontuacao = calcularPontuacao(aulasSobrelotacao, aulasSemSala);
+
             return ResponseEntity.ok(horarioPontuacao);
 
         } catch (IOException e) {

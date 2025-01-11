@@ -9,8 +9,6 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
     let lastSection=0;
 
 
-
-
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
     const responseMessage = document.getElementById('responseMessage');
@@ -25,14 +23,16 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
             const qualidade = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: formData });
 
             if (qualidade.ok) {
-                const pontos=await qualidade.json();
                 const responseData = await fetch('http://localhost:8080/api/json'); // Fetch the JSON from the Spring Boot endpoint
-                const jsonResponse = await responseData.json();
-                document.getElementById('scheduleQuality').textContent = `${pontos} pontos`;
-                console.log(jsonResponse); // Verifica o formato dos dados
-                console.log("qualidade"+pontos)
+                const horarioRecebido = await responseData.json();
+                this.data=horarioRecebido;
+
+                console.log("Aqui crl"+this.data.qualidade.horarioPontuacao);
+                document.getElementById('scheduleQuality').textContent = `${this.data.qualidade.horarioPontuacao} pontos`;
+                console.log(horarioRecebido); // Verifica o formato dos dados
+                console.log("qualidade"+this.data.qualidade.horarioPontuacao)
                 responseMessage.innerHTML = `<p style="color:black;">Horário Carregado com sucesso!</p>`;
-                this.data=jsonResponse;
+
                 //renderTable(jsonResponse); // Construir a tabela
                 determineLastSection();
                 renderHeaders();
@@ -80,7 +80,7 @@ function renderTable(data) {
 }
 
 function renderHeaders(){
-    const headers = ["Curso", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida"];
+    const headers = ["Curso", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida","ID"];
     console.log("Headers  " + headers);
 
     const headerRow = document.createElement('tr');
@@ -90,14 +90,20 @@ function renderHeaders(){
         headerRow.appendChild(th);
     });
     tableHeader.appendChild(headerRow);
-    this.data=data.slice(1);
+    this.data.aulas=data.aulas.slice(1);
 }
 
 
 function determineLastSection(){
-    this.lastSection=Math.ceil(this.data.length/500);
+    this.lastSection=Math.ceil(this.data.aulas.length/500);
     console.log(this.lastSection);
 }
+
+function updateCurrentPage(){
+    let pageId = document.getElementById('currentSection');
+    pageId.innerHTML = this.currentSection;
+}
+
 
 
 
@@ -106,6 +112,7 @@ function nextPage(){
         this.currentSection++;
         runSection(this.currentSection);
     }
+    updateCurrentPage();
     console.log(this.currentSection)
 }
 
@@ -114,6 +121,7 @@ function backPage(){
         this.currentSection--;
         runSection(this.currentSection);
     }
+    updateCurrentPage();
     console.log(this.currentSection)
 }
 
@@ -121,17 +129,23 @@ function backPage(){
 
 
 function runSection(section){
+    var id=(section*500);
     clearCurrentTable();
-    for (let i = 1+(section*500); i < 500+(section*500); i++) {
-        console.log(data[i]);
+    for (let i = (section*500); i < 500+(section*500); i++) {
+        console.log(data.aulas[i]);
         const tr = document.createElement('tr');
-        Object.keys(data[i]).forEach(linha => {
+        Object.keys(data.aulas[i]).forEach(linha => {
             const td = document.createElement('td');
-            td.textContent = data[i][linha] || ""; // Preenche as células com os valores
+            td.textContent = data.aulas[i][linha] || ""; // Preenche as células com os valores
             tr.appendChild(td);
         });
+        //Adicionar o ID
+        const td = document.createElement('td');
+        td.textContent = id.toString();
+        tr.appendChild(td);
         tableBody.appendChild(tr);
-        console.log(i)
+        id++;
+
     }
 
 }

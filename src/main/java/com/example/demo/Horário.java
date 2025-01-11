@@ -7,31 +7,64 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.*;
 
 public class Horário {
     String date;
     String name;
-    File listaHorarios;
+    List<Aula> aulas= new ArrayList<>();
     Metricas qualidade;
 
-    Horário(String name){
+
+
+    Horário(){}
+
+    Horário(String name, List<Aula> aulas){
         this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         this.name = name;
-        listaHorarios=new File("jsonHorarios/"+this.name+".json");
+        this.aulas=aulas;
     }
 
-    Horário(String location, String name,String date){
-        this.date=date;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
-        listaHorarios=new File("ListaHorarios.json");
+    }
+
+    public List<Aula> getAulas() {
+        return aulas;
+    }
+
+    public void setAulas(List<Aula> aulas) {
+        this.aulas = aulas;
+    }
+
+    public Metricas getQualidade() {
+        return qualidade;
+    }
+
+    public void setQualidade(Metricas qualidade) {
+        this.qualidade = qualidade;
+    }
+
+    Horário(String name, List<Aula> aulas, String data){
+        this.date=data;
+        this.name = name;
+        this.aulas=aulas;
     }
 
     public void loadMetricas(){
 
-
-
     }
 
 
@@ -39,15 +72,12 @@ public class Horário {
 
 
 
-    public void writeMySelf() throws JsonProcessingException {
+    public String writeMySelf() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(listaHorarios, this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         String jsonString = mapper.writeValueAsString(this);
         System.out.println(jsonString);
+        return jsonString;
     }
 
 

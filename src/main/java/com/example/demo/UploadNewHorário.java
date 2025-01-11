@@ -12,68 +12,65 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class UploadFile {
+public class UploadNewHorário {
+
+    Horário h;
+    File horárioFile;
 
     @PostMapping("/upload")
     public ResponseEntity<String> readFileAndCreateJsons(@RequestParam("file") MultipartFile file, @RequestParam("nome") String name) throws IOException {
-        System.out.println("NOME:"+name);
+        h=new Horário();
         List<Aula> linhasObj = new ArrayList<>();
-        List<String> linhas = new ArrayList<>();
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        File myObj = new File("./aulas.json");
-        FileWriter myWriter = new FileWriter("aulas.json");
-
-        myWriter.append("[\n");
-
+        List<String> linhas = new LinkedList<>();
+        Aula aulaObj;
+        System.out.println(1);
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String linha;
+            int tamanho=0;
+            System.out.println(2);
             while ((linha = br.readLine()) != null) {
+                tamanho++;
                 linhas.add(linha);
             }
+            System.out.println(3);
+            for (int i = 0; i < tamanho-1; i++) {
+                aulaObj=buildAulaObj(linhas.get(i));
+                aulaObj.setId(i);
+
+                linhasObj.add(aulaObj);
+            }
+
+
+            aulaObj=buildAulaObj(linhas.get(tamanho-1));
+            aulaObj.setId(tamanho-1);
+            h=new Horário(name,linhasObj);
+
         }
-
-        for (int i = 0; i < linhas.size(); i++) {
-            String json = ow.writeValueAsString(buildLinhaObj(linhas.get(i)));
-            myWriter.append(json + ",\n");
-            myWriter.flush();
-        }
-
-        String json = ow.writeValueAsString(buildLinhaObj(linhas.get(linhas.size() - 1)));
-        myWriter.append(json + "\n]");
-        myWriter.flush();
-        myWriter.close();
-
-        Metricas metricas=new Metricas();
-
-        ResponseEntity<Integer> overcrowdingResponse = metricas.evaluateOvercrowding(true, true);
-
-        if (!overcrowdingResponse.getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.status(overcrowdingResponse.getStatusCode())
-                    .body("Erro ao avaliar sobrelotação.");
-        }
-        // Atualizar pontuação do horário
-
-        int pontuacao = overcrowdingResponse.getBody();
-        System.out.println("Pontuação calculada: " + pontuacao);
-
-
-
-        return ResponseEntity.ok(String.valueOf(pontuacao));
+        return ResponseEntity.ok("fixe");
     }
 
 
-    @GetMapping("/json")
-    public ResponseEntity<Resource> getJsonFile() {
-        File aulas=new File("aulas.json");
 
-        if (!aulas.exists()) {
+    @GetMapping("/json")
+    public ResponseEntity<Resource> getJsonFile() throws IOException {
+        File horario=new File("./Horários/"+h.getName()+".json");
+        FileWriter myWriter = new FileWriter(horario);
+        Metricas metricas = new Metricas();
+        metricas.setNomeFile(h.getName());
+        metricas.setHorarioPontuacao(20);
+        h.setQualidade(metricas);
+        myWriter.write(h.writeMySelf());
+        myWriter.flush();
+        myWriter.close();
+        if (!horario.exists()) {
             return ResponseEntity.notFound().build(); // Return 404 if file doesn't exist
         }
-        Resource resource = new FileSystemResource(aulas);
+        Resource resource = new FileSystemResource(horario);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +89,7 @@ public class UploadFile {
 
 
         //refazer
-        Aula buildLinhaObj(String linha) {
+        Aula buildAulaObj(String linha) {
         String[] valoresRaw = linha.split(";");
         String[] valores= new String[valoresRaw.length];
         Aula linhaNew = new Aula();

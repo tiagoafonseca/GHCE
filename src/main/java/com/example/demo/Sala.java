@@ -6,18 +6,16 @@ import org.apache.logging.log4j.util.Strings;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Sala {
-
     int capacidadeSala;
     int capacidadeExame;
     String Sala;
     String Edificio;
     String[] info;
+    Map<Date,Aula[]> mapaAulas=new HashMap<Date,Aula[]>();
+
 
     static List<Sala> lerFicheiro(String filePath) throws IOException {
         File salas = new File(filePath);
