@@ -12,8 +12,10 @@ import java.io.IOException;
 public class DemoApplication {
 
 	public static void main(String[] args) throws IOException {
-		Sala.lerFicheiro("./caracterizacao.json");
 		SpringApplication.run(DemoApplication.class, args);
+		Sala.lerFicheiro("./caracterizacao.json");
+		System.out.println("Inicio");
+		ManagerHorários.loadAllHorários();
 	}
 
 	@GetMapping("/")

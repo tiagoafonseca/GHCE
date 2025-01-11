@@ -110,12 +110,12 @@ public class UploadNewHorário {
                 linhaNew.setCaracteristicasDaSalaPedidaParaAula(valoresRaw[9]);
             } else if (valoresRaw.length == 10) {
                 linhaNew.setCurso(valoresRaw[0]);
-                linhaNew.setCaracteristicasReais(null);
+                linhaNew.setCaracteristicasReais("");
                 linhaNew.setInicio(valoresRaw[6]);
                 linhaNew.setFim(valoresRaw[7]);
                 linhaNew.setDiaDaSemana(valoresRaw[5]);
-                linhaNew.setLotação(null);
-                linhaNew.setSalaDaAula(null);
+                linhaNew.setLotação("");
+                linhaNew.setSalaDaAula("");
                 linhaNew.setUnidadeDeExecucao(valoresRaw[1]);
                 linhaNew.setTurno(valoresRaw[2]);
                 linhaNew.setTurma(valoresRaw[3]);
@@ -124,18 +124,18 @@ public class UploadNewHorário {
                 linhaNew.setCaracteristicasDaSalaPedidaParaAula(valoresRaw[9]);
             } else {
                 linhaNew.setCurso(valoresRaw[0]);
-                linhaNew.setCaracteristicasReais(null);
+                linhaNew.setCaracteristicasReais("");
                 linhaNew.setInicio(valoresRaw[6]);
                 linhaNew.setFim(valoresRaw[7]);
                 linhaNew.setDiaDaSemana(valoresRaw[5]);
-                linhaNew.setLotação(null);
-                linhaNew.setSalaDaAula(null);
+                linhaNew.setLotação("");
+                linhaNew.setSalaDaAula("");
                 linhaNew.setUnidadeDeExecucao(valoresRaw[1]);
                 linhaNew.setTurno(valoresRaw[2]);
                 linhaNew.setTurma(valoresRaw[3]);
                 linhaNew.setInscritosNoTurno(valoresRaw[4]);
-                linhaNew.setDia(null);
-                linhaNew.setCaracteristicasDaSalaPedidaParaAula(null);
+                linhaNew.setDia("");
+                linhaNew.setCaracteristicasDaSalaPedidaParaAula("");
             }
         }catch (Exception e){
             return linhaNew;

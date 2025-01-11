@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import java.util.Arrays;
 
 public class Aula {
@@ -17,7 +19,6 @@ public class Aula {
     String[] salaDaAula;
     String[] lotação;
     String[] caracteristicasReais;
-
 
     Aula(String[] curso, String[] unidadeDeExecucao, String[] turno, String[] turma, String[] inscritosNoTurno, String[] diaDaSemana,
           String[] inicio, String[] fim, String[] dia, String[] caracteristicasDaSalaPedidaParaAula, String[] salaDaAula, String[] lotação, String[] caracteristicasReais) {
@@ -37,6 +38,72 @@ public class Aula {
         this.lotação = lotação;
     }
 
+
+
+    @JsonSetter("curso")
+    void setCurso(String[] curso) {
+        this.curso = curso;
+    }
+
+    @JsonSetter("unidadeDeExecucao")
+    public void setUnidadeDeExecucao(String[] unidadeDeExecucao) {
+        this.unidadeDeExecucao = unidadeDeExecucao;
+    }
+
+    @JsonSetter("turno")
+    public void setTurno(String[] turno) {
+        this.turno = turno;
+    }
+
+    @JsonSetter("turma")
+    public void setTurma(String[] turma) {
+        this.turma = turma;
+    }
+
+    @JsonSetter("inscritosNoTurno")
+    public void setInscritosNoTurno(String[] inscritosNoTurno) {
+        this.inscritosNoTurno = inscritosNoTurno;
+    }
+
+    @JsonSetter("diaDaSemana")
+    public void setDiaDaSemana(String[] diaDaSemana) {
+        this.diaDaSemana = diaDaSemana;
+    }
+
+    @JsonSetter("inicio")
+    public void setInicio(String[] inicio) {
+        this.inicio = inicio;
+    }
+
+    @JsonSetter("fim")
+    public void setFim(String[] fim) {
+        this.fim = fim;
+    }
+
+    @JsonSetter("dia")
+    public void setDia(String[] dia) {
+        this.dia = dia;
+    }
+
+    @JsonSetter("caracteristicasDaSalaPedidaParaAula")
+    public void setCaracteristicasDaSalaPedidaParaAula(String[] caracteristicasDaSalaPedidaParaAula) {
+        this.caracteristicasDaSalaPedidaParaAula = caracteristicasDaSalaPedidaParaAula;
+    }
+
+    @JsonSetter("salaDaAula")
+    public void setSalaDaAula(String[] salaDaAula) {
+        this.salaDaAula = salaDaAula;
+    }
+
+    @JsonSetter("lotação")
+    public void setLotação(String[] lotação) {
+        this.lotação = lotação;
+    }
+
+    @JsonSetter("caracteristicasReais")
+    public void setCaracteristicasReais(String[] caracteristicasReais) {
+        this.caracteristicasReais = caracteristicasReais;
+    }
 
     public Aula() {
     }
