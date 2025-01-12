@@ -20,12 +20,15 @@ public class Horário {
     Horário(){}
 
     Horário(String name, List<Aula> aulas){
-        this.date=new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        this.date=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         this.name = name;
         this.aulas=aulas;
     }
 
     public String getDate() {
+        if(date==null){
+            return "Não meteste data nenhuma burro do crl";
+        }
         return date;
     }
 
@@ -76,7 +79,6 @@ public class Horário {
         ObjectMapper mapper = new ObjectMapper();
 
         String jsonString = mapper.writeValueAsString(this);
-        System.out.println(jsonString);
         return jsonString;
     }
 

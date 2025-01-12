@@ -79,6 +79,8 @@ function renderTable(data) {
 
 }
 
+
+
 function renderHeaders(){
     const headers = ["Curso", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida","ID"];
     console.log("Headers  " + headers);

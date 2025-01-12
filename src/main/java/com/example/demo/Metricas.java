@@ -32,6 +32,10 @@ public class Metricas {
         return salas;
     }
 
+    public int getHorarioPontuacao(){
+        return horarioPontuacao;
+    }
+
     public void setSalas(List<Sala> salas) {
         this.salas = salas;
     }
