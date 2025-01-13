@@ -1,14 +1,18 @@
 // Lógica do formulário de upload
+
+
+this.currentSection=0;
+
+this.idDoHorarioSelecionado="";
+this.nomeHorarioSelecionado="";
+this.headersLoaded=false;
+
 document.getElementById('uploadForm').onsubmit = async (event) => {
     event.preventDefault();
-
     let tableHeader = document.getElementById('tableHeader');
     let tableBody = document.getElementById('tableBody');
     let data="";
-    this.currentSection=0;
     let lastSection=0;
-
-
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
     const responseMessage = document.getElementById('responseMessage');
@@ -35,9 +39,13 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
 
                 //renderTable(jsonResponse); // Construir a tabela
                 determineLastSection();
-                renderHeaders();
+                if(!headersLoaded) {
+                    renderHeaders();
+                    headersLoaded=true;
+                }
                 runSection(0);
-
+                document.getElementById("nomeHorariobig").innerHTML=this.data.name;
+                renderHorarios();
                 // Atualizar a qualidade do horário após o upload
                 //fetchScheduleQuality();
             } else {
@@ -74,15 +82,11 @@ async function fetchScheduleQuality() {
     }
 }
 
-// Construção da Tabela
-function renderTable(data) {
-
-}
 
 
 
 function renderHeaders(){
-    const headers = ["Curso", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida","ID"];
+    const headers = ["ID", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida","Curso"];
     console.log("Headers  " + headers);
 
     const headerRow = document.createElement('tr');
@@ -92,12 +96,13 @@ function renderHeaders(){
         headerRow.appendChild(th);
     });
     tableHeader.appendChild(headerRow);
-    this.data.aulas=data.aulas.slice(1);
+
 }
 
 
 function determineLastSection(){
-    this.lastSection=Math.ceil(this.data.aulas.length/500);
+    this.lastSection=Math.ceil(this.data.aulas.length/500)-1;
+    document.getElementById("ultimaPágina").innerHTML= this.lastSection;
     console.log(this.lastSection);
 }
 
@@ -110,6 +115,7 @@ function updateCurrentPage(){
 
 
 function nextPage(){
+
     if(this.currentSection!=this.lastSection){
         this.currentSection++;
         runSection(this.currentSection);
@@ -130,8 +136,10 @@ function backPage(){
 
 
 
+
 function runSection(section){
-    var id=(section*500);
+    this.currentSection=section;
+    updateCurrentPage();
     clearCurrentTable();
     for (let i = (section*500); i < 500+(section*500); i++) {
         console.log(data.aulas[i]);
@@ -141,12 +149,9 @@ function runSection(section){
             td.textContent = data.aulas[i][linha] || ""; // Preenche as células com os valores
             tr.appendChild(td);
         });
-        //Adicionar o ID
-        const td = document.createElement('td');
-        td.textContent = id.toString();
-        tr.appendChild(td);
+
         tableBody.appendChild(tr);
-        id++;
+
 
     }
 
@@ -180,4 +185,31 @@ document.getElementById('recalculateQualityButton').addEventListener('click', as
         document.getElementById('scheduleQuality').textContent = "Erro ao recalcular qualidade.";
     }
 });
+
+
+
+
+function changeSelectID(id){
+    const div = document.getElementById(id);
+    const specificParagraph = div.querySelector('#nomeHorario');
+    this.nomeHorarioSelecionado=specificParagraph.innerHTML;
+    console.log("Selecionei isto: " + this.nomeHorarioSelecionado);
+}
+
+async function LoadHorárioSelecionado() {
+    const formData = new FormData();
+    formData.append('nomeHorario', this.nomeHorarioSelecionado);
+    console.log("Enviei "+this.nomeHorarioSelecionado);
+    var horario = await fetch('http://localhost:8080/api2/getSelectedHorario', {method: 'POST', body: formData});
+    horarioObjeto = await horario.json();
+    this.data=horarioObjeto;
+    this.data.aulas=data.aulas.slice(1);
+    if(!this.headersLoaded){
+        renderHeaders();
+        this.headersLoaded=true;
+    }
+    determineLastSection();
+    runSection(0);
+    document.getElementById("nomeHorariobig").innerHTML=this.data.name;
+}
 

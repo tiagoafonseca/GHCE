@@ -3,10 +3,7 @@ package com.example.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,4 +65,19 @@ public class ManagerHorários {
         System.out.println("Tamanho da minha pica: "+horarios.size()+"km");
         return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("/getSelectedHorario")
+    public static ResponseEntity<Horário> getSelectedHorario(@RequestParam("nomeHorario") String nomeHorario) {
+        for(Horário horario : horarios) {
+            if(horario.name.equals(nomeHorario)) {
+                return ResponseEntity.ok(horario);
+
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+
 }

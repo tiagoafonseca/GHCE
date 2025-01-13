@@ -34,24 +34,30 @@
             <button type="submit">Carregar</button>
         </form>
     </div>
-    <div class="upload-container3" id="caixaGrandeOndeMetoOsHorarios">
+    <div class="upload-container3" >
         <h2>Horários Carregados</h2>
         <div class="headersHorarios">
             <p>Qualidade</p>
             <p>Nome</p>
             <p>Última Atualização</p>
         </div>
-        <div class="horariosContainer">
-            <p>20</p>
-            <p>Pixa do luis</p>
-            <p>Falava com a ex</p>
+        <div class="CarregaAquiAsCenas" id="caixaGrandeOndeMetoOsHorarios">
+
+        </div>
+        <div class="butoesWrappers">
+        <button onclick="LoadHorárioSelecionado()">
+            Carregar Horário
+        </button>
+        <button>
+            Apagar Horário
+        </button>
         </div>
     </div>
 </div>
 <div id="responseMessage"></div>
 
 <!-- Adicionar a tabela aqui -->
-<h2>Horários Processados</h2>
+<h2 id="nomeHorariobig">Horários Processados</h2>
 <div class="buttonsDiv">
     <div class="scheduelePointsDiv">
         <p>Qualidade do Horário:</p>
@@ -62,7 +68,7 @@
         <p>Page: </p>
         <p id="currentSection" class="currentSectionCss">12</p>
         <p>...</p>
-        <p>54</p>
+        <p id="ultimaPágina">54</p>
         <img onclick="nextPage()" src="../imgs/right-arrow.png">
     </div>
     </div>

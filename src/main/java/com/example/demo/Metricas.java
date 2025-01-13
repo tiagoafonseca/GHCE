@@ -166,7 +166,6 @@ public class Metricas {
             @RequestParam(defaultValue = "true") boolean noRoom) {
 
         File horarioFile = new File(nomeFile);
-        System.out.println(nomeFile);
         File caracterizacaoFile = new File("./caracterizacao.json");
 
         if (!horarioFile.exists() || !caracterizacaoFile.exists()) {

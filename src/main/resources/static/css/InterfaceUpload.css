@@ -312,8 +312,6 @@ body {
  .sectionWrapper img:hover{
     background-color: lightgreY;
      transition: 0.5s;
-
-
  }
 
 
@@ -340,6 +338,7 @@ body {
      text-align: center;
      font-weight: 600;
      background-color: #e1a1a1;
+
  }
 
  .horariosContainer p{
@@ -354,4 +353,11 @@ body {
      font-size: 0.9rem;
      text-align: center;
      font-weight: normal;
+ }
+
+
+ .butoesWrappers{
+     display: flex;
+     flex-direction: row;
+     gap: 10px;
  }

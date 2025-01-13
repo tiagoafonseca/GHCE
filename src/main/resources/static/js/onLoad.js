@@ -28,6 +28,10 @@ async function renderHorarios() {
 
             const div = document.createElement('div');
             div.classList.add("horariosContainer");
+            div.id = "horario" + index;
+            div.onclick = function() {
+                changeSelectID(this.id);
+            };
 
             const pQualidade = document.createElement('p');
             pQualidade.innerHTML = qualidades[index];
@@ -35,6 +39,7 @@ async function renderHorarios() {
 
             const pNome = document.createElement('p');
             pNome.innerHTML = nome;
+            pNome.id="nomeHorario"
             pNome.classList.add("p");
 
             const pData = document.createElement('p');
@@ -49,4 +54,7 @@ async function renderHorarios() {
         console.error('Error fetching or processing data:', error);
     }
 }
+
+
+
 
