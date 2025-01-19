@@ -17,7 +17,7 @@ public class Aula {
     String[] fim;
     String[] dia;
     String[] caracteristicasDaSalaPedidaParaAula;
-    String[] salaDaAula;
+    private String[] salaDaAula = new String[]{""};
     String[] lotação;
     String[] caracteristicasReais;
 
@@ -48,7 +48,7 @@ public class Aula {
 
 
     @JsonIgnore
-    public int LotaçãoInInt(){
+    public int lotaçãoMaximaInInt(){
         try {
             int teste= Integer.parseInt(lotação[0]);
             return teste;
@@ -56,7 +56,17 @@ public class Aula {
             System.out.println("Erro na conversão");
             return -1;
         }
+    }
 
+    @JsonIgnore
+    public int alunosNaAulaInInt(){
+        try {
+            int teste= Integer.parseInt(inscritosNoTurno[0]);
+            return teste;
+        }catch (Exception e){
+            System.out.println("Erro na conversão");
+            return -1;
+        }
     }
 
     @JsonSetter("unidadeDeExecucao")
@@ -179,8 +189,9 @@ public class Aula {
     }
 
     public String[] getSalaDaAula() {
-        return salaDaAula;
-    }
+            return salaDaAula; // No null checks needed
+        }
+
 
     @JsonIgnore
     public String getSalaDeAulaFull(){

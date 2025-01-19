@@ -28,17 +28,21 @@ public class UploadNewHorário {
         List<Aula> linhasObj = new ArrayList<>();
         List<String> linhas = new LinkedList<>();
         Aula aulaObj;
-        System.out.println(1);
+        Metricas metricas = new Metricas();
+
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String linha;
             int tamanho=0;
-            System.out.println(2);
+
             while ((linha = br.readLine()) != null) {
                 tamanho++;
+                if(tamanho!=1)
                 linhas.add(linha);
+
             }
-            System.out.println(3);
-            for (int i = 0; i < tamanho-1; i++) {
+
+            for (int i = 0; i < tamanho-2; i++) {
                 aulaObj=buildAulaObj(linhas.get(i));
                 aulaObj.setId(i);
 
@@ -46,7 +50,7 @@ public class UploadNewHorário {
             }
 
 
-            aulaObj=buildAulaObj(linhas.get(tamanho-1));
+            aulaObj=buildAulaObj(linhas.get(tamanho-2));
             aulaObj.setId(tamanho-1);
             h=new Horário(name,linhasObj);
 
@@ -61,7 +65,10 @@ public class UploadNewHorário {
         File horario=new File("./Horários/"+h.getName()+".json");
         FileWriter myWriter = new FileWriter(horario);
         Metricas metricas = new Metricas();
-        //metricas.setNomeFile(h.getName());
+        for(Aula a : h.getAulas()){
+            metricas.tinderMatch(a);
+        }
+        metricas.printMap();
         metricas.setHorarioPontuacao(20);
         h.setQualidade(metricas);
         myWriter.write(h.writeMySelf());

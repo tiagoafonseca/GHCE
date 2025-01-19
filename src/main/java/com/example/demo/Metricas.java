@@ -14,11 +14,11 @@ import java.io.*;
 import java.util.*;
 
 //Mapa de Metricas
-// 1-> Aula em Sobrelotação
-// 2-> Sem sala Atribuida ou Sala n existe
-// 3-> Informação em Falta
+// 1-> Aula em Sobrelotação DONE
+// 2-> Sem sala Atribuida ou Sala n existe DONE
+// 3-> Informação em Falta DONE
 // 4-> Horário PL fora de PL
-// 5-> Aula ao Sábado
+// 5-> Aula ao Sábado  DONE
 // 6-> Sala desadequada
 
 @RestController
@@ -60,62 +60,78 @@ public class Metricas {
 
 
     public void tinderMatch(Aula a) {
-        if(a.getSalaDaAula()==null){
-            return;
-        }
+        List<Integer> i= determineAllTheStats(a);
         for (Sala s : salas) {
             if (s.getSala().equals(a.getSalaDeAulaFull())) {
-                determineAllTheStats(a,s);
-
                 //Correr Validaçoes e Flagar aula
                 //Ligar aula a sala
-                System.out.println("It's a Match!");
+                i.remove(i.size()-1);
+                this.mapaErros.put(a.getId(),i);
                 return;
             }
         }
-        System.out.println("It's not a Match :((( " +  a.getSalaDeAulaFull());
+        //Sala sem correspondencia
+        this.mapaErros.put(a.getId(),i);
+    }
 
+    public void printMap(){
+        for(int i=0; i<mapaErros.size(); i++){
+            System.out.println("Id:"+i+" "+mapaErros.get(i));
+        }
     }
 
 
-
-    public void determineAllTheStats(Aula a,Sala s){
+    public List<Integer> determineAllTheStats(Aula a){
         List<Integer> tempStats = new ArrayList<>();
-        int idAula= a.getId();
-        if(classInOverLotacion(a,s))
+        if(classInOverLotacion(a)){
+            System.out.println(a.alunosNaAulaInInt() +" e "+  a.lotaçãoMaximaInInt());
             tempStats.add(1);
+        }
        // if(semSalaOuSalaNaoExiste(a,s))
          //   tempStats.add(2);
-        //if(MissingInfo(a,s))
-          //  tempStats.add(3);
+        if(MissingInfo(a))
+            tempStats.add(3);
         //if(HorarioPLForaDePL(a,s))
           //  tempStats.add(4);
-        //if(aulaAoSabado(a,s))
-          //  tempStats.add(5);
+        if(aulaAoSabado(a))
+            tempStats.add(5);
         //if(salaDesequada(a,s))
           //  tempStats.add(6);
-        this.mapaErros.put(idAula,tempStats);
+
+        tempStats.add(2);
+        return tempStats;
+    }
+     //A FUNCIONAR
+    public boolean aulaAoSabado(Aula aula){
+        return aula.getDiaDaSemana()[0].equals("S�b");
+    }
+
+   // public boolean HorarioPLForaDePL(Aula aula, Sala sala){ //Lotacion ahahahahahha
+     //   return sala.getCapacidadeSala() > aula.lotaçãoInInt();
+    //}
+
+
+    public void semSalaOuSalaNaoExiste(Aula aula, Sala sala){ //Lotacion ahahahahahha
+        //this.mapaErros.put(aula.idAula);
 
     }
 
-    public boolean aulaAoSabado(Aula aula, Sala sala){
-        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
+    public boolean MissingInfo(Aula aula){
+        try {
+            return aula.getDia()[0].isEmpty() || aula.getLotação()[0].isEmpty() || aula.getSalaDaAula()[0].isEmpty() ||
+                    aula.getFim()[0].isEmpty() || aula.getDiaDaSemana()[0].isEmpty() || aula.getTurma()[0].isEmpty() ||
+                    aula.getInicio()[0].isEmpty() || aula.getCaracteristicasReais()[0].isEmpty() ||
+                    aula.getCaracteristicasDaSalaPedidaParaAula()[0].isEmpty() || aula.getUnidadeDeExecucao()[0].isEmpty() ||
+                    aula.getTurno()[0].isEmpty() || aula.getInscritosNoTurno()[0].isEmpty() || aula.getCurso()[0].isEmpty();
+        }catch (NullPointerException  | ArrayIndexOutOfBoundsException e){
+            return true;
+        }
     }
 
-    public boolean HorarioPLForaDePL(Aula aula, Sala sala){ //Lotacion ahahahahahha
-        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
-    }
 
-    public boolean semSalaOuSalaNaoExiste(Aula aula, Sala sala){ //Lotacion ahahahahahha
-        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
-    }
-
-    public boolean MissingInfo(Aula aula, Sala sala){
-        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
-    }
-
-    public boolean classInOverLotacion(Aula aula, Sala sala){
-        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
+    //A FUNCIONAR
+    public boolean classInOverLotacion(Aula aula){
+        return aula.lotaçãoMaximaInInt() < aula.alunosNaAulaInInt();
     }
 
 
