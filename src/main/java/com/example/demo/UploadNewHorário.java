@@ -68,6 +68,7 @@ public class UploadNewHorário {
         for(Aula a : h.getAulas()){
             metricas.tinderMatch(a);
         }
+        metricas.printMap();
         metricas.setHorarioPontuacao(20);
         h.setQualidade(metricas);
         myWriter.write(h.writeMySelf());
