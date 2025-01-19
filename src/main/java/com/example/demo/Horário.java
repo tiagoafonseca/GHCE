@@ -73,9 +73,6 @@ public class Horário {
 
 
 
-
-
-
     public String writeMySelf() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 

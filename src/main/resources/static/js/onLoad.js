@@ -2,6 +2,7 @@ renderHorarios();
 
 async function renderHorarios() {
     const caixa = document.getElementById("caixaGrandeOndeMetoOsHorarios");
+    caixa.innerHTML = "";
 
     // Fetch data from the API
     try {
@@ -54,6 +55,8 @@ async function renderHorarios() {
         console.error('Error fetching or processing data:', error);
     }
 }
+
+
 
 
 

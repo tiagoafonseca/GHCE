@@ -34,25 +34,25 @@ public class ManagerHorários {
                 }
             }
 
-            nomes= new String[listOfFiles.length];
+            nomes = new String[listOfFiles.length];
             qualidades = new String[listOfFiles.length];
             datas = new String[listOfFiles.length];
 
 
-        }else {
+        } else {
             return null;
         }
 
-        int j=0;
-        for( File file : listOfFiles ) {
+        int j = 0;
+        for (File file : listOfFiles) {
             try {
                 Horário h = objectMapper.readValue(file, Horário.class);
-                nomes[j]=h.getName();
-                qualidades[j]=String.valueOf(h.getQualidade().getHorarioPontuacao());
-                datas[j]=h.getDate();
+                nomes[j] = h.getName();
+                qualidades[j] = String.valueOf(h.getQualidade().getHorarioPontuacao());
+                datas[j] = h.getDate();
                 horarios.add(h);
                 j++;
-            } catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             response.put("nomes", nomes);
@@ -60,15 +60,15 @@ public class ManagerHorários {
             response.put("datas", datas);
         }
 
-        System.out.println("Tamanho da minha pica: "+horarios.size()+"km");
+        System.out.println("Tamanho da minha pica: " + horarios.size() + "km");
         return ResponseEntity.ok(response);
     }
 
 
     @PostMapping("/getSelectedHorario")
     public static ResponseEntity<Horário> getSelectedHorario(@RequestParam("nomeHorario") String nomeHorario) {
-        for(Horário horario : horarios) {
-            if(horario.name.equals(nomeHorario)) {
+        for (Horário horario : horarios) {
+            if (horario.name.equals(nomeHorario)) {
                 return ResponseEntity.ok(horario);
 
             }
@@ -76,6 +76,33 @@ public class ManagerHorários {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/deleteHorario")
+    public static ResponseEntity<String> deleteHorario(@RequestParam("nomeHorario") String nomeHorario) {
+        // Remover o horário da lista
+        boolean removedFromList = horarios.removeIf(horario -> horario.getName().equals(nomeHorario));
+
+        // Se não foi encontrado na lista, retorna erro
+        if (!removedFromList) {
+            return ResponseEntity.status(404).body("Horário não encontrado na lista.");
+        }
+
+        // Remover o arquivo do sistema de arquivos
+        File folder = new File("./Horários/");
+        File[] listOfFiles = folder.listFiles();
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile() && file.getName().equals(nomeHorario + ".json")) {
+                    if (file.delete()) {
+                        return ResponseEntity.ok("Horário removido com sucesso!");
+                    } else {
+                        return ResponseEntity.status(500).body("Erro ao remover o arquivo do sistema de arquivos.");
+                    }
+                }
+            }
+        }
+
+        return ResponseEntity.status(404).body("Arquivo do horário não encontrado no sistema de arquivos.");
+    }
 
 
 }

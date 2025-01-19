@@ -1,4 +1,4 @@
- /* Estilo para a página toda */
+/* Estilo para a página toda */
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -11,11 +11,10 @@ body {
 
 }
 
- .bigWrapper{
-     display: flex;
-     flex-direction: row;
-
- }
+.bigWrapper {
+    display: flex;
+    flex-direction: row;
+}
 
 
 /* Caixa do formulário */
@@ -34,29 +33,31 @@ body {
     margin: 10px;
 }
 
-.bigWrapperDeButoes{
+.bigWrapperDeButoes {
     display: flex;
     flex-direction: column;
     margin: 0;
     width: 100%;
 }
 
- .bigWrapperDeButoes button{
-     margin: 0;
-     background-color: lightgrey;
-     border: none;
-     font-weight: normal;
-     transition: 0.5s;
- }
+.bigWrapperDeButoes button {
+    margin: 0;
+    background-color: lightgrey;
+    border: none;
+    font-weight: normal;
+    transition: 0.5s;
+}
 
- .bigWrapperDeButoes button:hover{
-     background-color: white;
-     transition: 0.5s;
+.butoesWrappers .butoes
 
- }
+.bigWrapperDeButoes button:hover {
+    background-color: white;
+    transition: 0.5s;
+
+}
 
 
- /* Estilo do título */
+/* Estilo do título */
 .upload-container h2 {
     color: #333;
     margin-bottom: 1em;
@@ -95,7 +96,7 @@ body {
     transition: background-color 0.3s;
 }
 
-.upload-container1{
+.upload-container1 {
     background-color: #fff;
     border-radius: 8px;
     padding: 2em;
@@ -110,9 +111,9 @@ body {
     margin: 10px;
 }
 
- .upload-container1 button{
-     padding: 0.8em 1em;
- }
+.upload-container1 button {
+    padding: 0.8em 1em;
+}
 
 .upload-container button:hover {
     background-color: #0056b3;
@@ -120,180 +121,189 @@ body {
 }
 
 
+table {
+    width: 80%;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-collapse: collapse; /* Importante para mesclar bordas */
+    display: block;
+    overflow-x: auto;
+    max-height: 600px;
+}
 
- table {
-     width: 80%;
-     margin-top: 20px;
-     font-family: Arial, sans-serif;
-     font-size: 14px;
-     border-collapse: collapse; /* Importante para mesclar bordas */
-     display: block;
-     overflow-x: auto;
-     max-height: 600px;
- }
+.thead {
+    width: 100%;
 
- .thead{
-     width: 100%;
+}
 
- }
+.tbody {
+    display: block;
+}
 
- .tbody{
-       display: block;
- }
+th {
+    z-index: 1;
+    position: sticky;
+    top: 0;
+}
 
- th{
-     z-index: 1;
-     position: sticky;
-     top:0;
- }
+th, td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
 
- th, td {
-     border: 1px solid #dddddd;
-     padding: 8px;
-     text-align: center;
+}
 
- }
+th {
+    background-color: #9a9a9a;
+    color: white;
+}
 
- th{
-     background-color: #9a9a9a;
-     color: white;
- }
-
- tr{
-     display: table-row;
-     flex-direction: column;
- }
-
-
- tr:nth-child(even) {
-     background-color: #b8b8b8;
-
- }
-
- tr:hover {
-     background-color: #dddddd;
- }
-
- td{
-     max-width: 215px;
-     word-wrap: break-word
- }
-
- .buttonsDiv{
-     display: flex;
-     flex-direction: row;
-     justify-content: center;
-
-     width: 80%;
- }
-
- .checkBoxs{
-     display: flex;
-     justify-content: center;
-     align-items: end;
-     flex-direction: column;
- }
-
- .scheduelePointsDiv{
-     display: flex;
-     flex-direction: row;
-     gap: 7px;
- }
-
- .textBox{
-     display: flex;
-     flex-direction: column;
-     gap: 10px;
- }
-
- buttonMerdas{
-     border: none;
-     border-radius: 1.2rem;
-     background-color: #007bff;
-     color: white;
-     font-weight: bold;
-     transition: 0.5s;
-     cursor: pointer;
- }
-
- .wrapper{
-     display: flex;
-    padding:10px;
- }
-
- .butoes{
-     gap: 10px;
-     display: flex;
-     margin-top:1em;
-     width: 100%;
-     justify-content: center;
-
- }
-
- .butoes button{
-     width: 50%;
-     padding: 0.4em 1em;
-     font-size:0.95rem;
- }
+tr {
+    display: table-row;
+    flex-direction: column;
+}
 
 
- buttonMerdas:hover{
+tr:nth-child(even) {
+    background-color: #b8b8b8;
 
-     background-color: #0069da;
-     transition: 0.5s;
-     border-radius: 4rem;
-     color: white;
-     transition: 0.3s;
- }
+}
+
+tr:hover {
+    background-color: #dddddd;
+}
+
+td {
+    max-width: 215px;
+    word-wrap: break-word
+}
+
+.buttonsDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    width: 80%;
+}
+
+.checkBoxs {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
+}
+
+.scheduelePointsDiv {
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+}
+
+.textBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.buttonMerdas {
+    border: none;
+    border-radius: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.wrapper {
+    display: flex;
+    padding: 10px;
+}
+
+.butoes {
+    gap: 10px;
+    display: flex;
+    margin-top: 1em;
+    width: 100%;
+    justify-content: center;
+
+}
+
+.butoes button {
+    width: 50%;
+    padding: 0.4em 1em;
+    font-size: 0.95rem;
+}
 
 
+.buttonMerdas:hover {
 
- .textBox{
-     width: 20%;
+    background-color: #0069da;
+    transition: 0.5s;
+    border-radius: 4rem;
+    color: white;
+}
 
- }
 
- textarea{
+.textBox {
+    width: 20%;
+
+}
+
+textarea {
     resize: none;
- }
+}
 
 
- .scheduelePointsDiv p{
-     font-weight: bold;
-     font-size:1.2rem ;
+.scheduelePointsDiv p {
+    font-weight: bold;
+    font-size: 1.2rem;
 
 
- }
+}
 
- .textBox button{
-     border-radius: 1rem;
-     padding-top: 4px;
-     padding-bottom: 4px;
- }
+.textBox button {
+    border-radius: 1rem;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
 
- .upload-container3{
-     background-color: #fff;
-     border-radius: 8px;
-     padding: 2em;
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-     text-align: center;
-     max-width: 400px;
-     justify-content: start;
-     align-items: center;
-     flex-direction: column;
-     width: 100%;
-     display: flex;
-     margin: 10px;
- }
+.upload-container3 {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    display: flex;
+    margin: 10px;
+}
 
- .upload-container3 h2 {
-     color: #333;
-     margin-bottom: 0em;
-     font-size: 1.8em;
- }
+.upload-container3 h2 {
+    color: #333;
+    margin-bottom: 0;
+    font-size: 1.8em;
+}
+
+.upload-container3 .CarregaAquiAsCenas {
+    width: 100%;
+    max-height: 200px; /* Define uma altura máxima */
+    overflow-y: auto; /* Ativa o scroll vertical */
+    background-color: lightpink; /* Cor de fundo para destacar */
+}
+
+.upload-container3 .horariosContainer:hover {
+    background-color: #ffffff;
+    transition: 0.5s;
+}
 
 
-.sectionWrapper{
+.sectionWrapper {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -301,70 +311,87 @@ body {
     gap: 10px;
 }
 
-.sectionWrapper img{
+.sectionWrapper img {
     width: 15px;
     height: 15px;
-    padding:10px;
+    padding: 10px;
     border-radius: 50%;
     transition: 0.5s;
     cursor: pointer;
 }
 
- .currentSectionCss{
-     font-weight:bold;
-     text-decoration: underline;
-     font-size: 1.1rem;
- }
+.currentSectionCss {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 1.1rem;
+}
 
- .sectionWrapper img:hover{
+.sectionWrapper img:hover {
     background-color: lightgreY;
-     transition: 0.5s;
- }
+    transition: 0.5s;
+}
 
 
- .headersHorarios{
-     width: 100%;
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     text-align: center;
-     font-weight: 600;
- }
+.headersHorarios {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    font-weight: 600;
+}
 
- .headersHorarios p{
-     width: 33%;
-     text-align: center;
-     font-size: 0.9rem;
- }
+.headersHorarios p {
+    width: 33%;
+    text-align: center;
+    font-size: 0.9rem;
+}
 
- .horariosContainer{
-     width: 100%;
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     text-align: center;
-     font-weight: 600;
-     background-color: #e1a1a1;
+.horariosContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    font-weight: 600;
+    background-color: #e1a1a1;
 
- }
+}
 
- .horariosContainer p{
-     width: 33%;
-     font-size: 0.8rem;
-     text-align: center;
-     font-weight: normal;
- }
+.horariosContainer p {
+    width: 33%;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: normal;
+}
 
- .horariosContainer p:first-child{
-     width: 33%;
-     font-size: 0.9rem;
-     text-align: center;
-     font-weight: normal;
- }
+.horariosContainer p:first-child {
+    width: 33%;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: normal;
+}
 
 
- .butoesWrappers{
-     display: flex;
-     flex-direction: row;
-     gap: 10px;
- }
+.butoesWrappers {
+    display: flex; /* Alinha os botões em uma linha */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    gap: 1em; /* Adiciona espaçamento entre os botões */
+    margin-top: 1em; /* Espaçamento superior */
+
+}
+
+.butoesWrappers button {
+    background-color: lightgrey;
+    border: none;
+    font-weight: normal;
+    transition: 0.5s;
+    padding: 0.4em 1em;
+    font-size: 0.95rem;
+}
+
+.butoesWrappers button:hover {
+    background-color: #ffff;
+    transition: 0.5s;
+}
+

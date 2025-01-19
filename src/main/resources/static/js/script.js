@@ -1,8 +1,6 @@
 // Lógica do formulário de upload
 
-
 this.currentSection=0;
-
 this.idDoHorarioSelecionado="";
 this.nomeHorarioSelecionado="";
 this.headersLoaded=false;
@@ -84,7 +82,6 @@ async function fetchScheduleQuality() {
 
 
 
-
 function renderHeaders(){
     const headers = ["ID", "Curso","Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida"];
     console.log("Headers  " + headers);
@@ -132,7 +129,6 @@ function backPage(){
     updateCurrentPage();
     console.log(this.currentSection)
 }
-
 
 
 
@@ -187,12 +183,15 @@ function clearCurrentTable(){
 // });
 
 
-
+let IdHorarioSelecionado = null;  // variável global que guarda o ID do horário selecionado
+let nomeHorarioSelecionado = "";  // variável global que guarda o Nome do horário selecionado
 
 function changeSelectID(id){
     const div = document.getElementById(id);
     const specificParagraph = div.querySelector('#nomeHorario');
     this.nomeHorarioSelecionado=specificParagraph.innerHTML;
+    IdHorarioSelecionado = id;
+    nomeHorarioSelecionado = this.nomeHorarioSelecionado;
     console.log("Selecionei isto: " + this.nomeHorarioSelecionado);
 }
 
@@ -213,5 +212,52 @@ async function LoadHorárioSelecionado() {
     determineLastSection();
     runSection(0);
     document.getElementById("nomeHorariobig").innerHTML=this.data.name;
+
 }
 
+// BUG - ao dar refresh o horário volta
+/* async function ApagarHorarioDaLista() {
+    if (!IdHorarioSelecionado) {
+        alert('Nenhum horário selecionado!');
+        return;
+    }
+    const elemento = document.getElementById(IdHorarioSelecionado);
+    elemento.remove();
+    IdHorarioSelecionado = null;
+    console.log('Horário removido.');
+} */
+
+async function ApagarHorarioDaLista() {
+    if (!IdHorarioSelecionado) {
+        alert('Nenhum horário selecionado!');
+        return;
+    }
+
+    const nomeHorario = nomeHorarioSelecionado;
+    console.log(`Tentando apagar o horário: ${nomeHorario}`);
+
+    try {
+        const response = await fetch('http://localhost:8080/api2/deleteHorario', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({ nomeHorario }),
+        });
+
+        if (response.ok) {
+            const elemento = document.getElementById(IdHorarioSelecionado);
+            elemento.remove();
+            IdHorarioSelecionado = null;
+            nomeHorarioSelecionado = null;
+            console.log(`Horário ${nomeHorario} apagado com sucesso!`);
+        } else {
+            const errorMessage = await response.text();
+            console.error(`Erro ao apagar o horário: ${errorMessage}`);
+            alert(`Erro: ${errorMessage}`);
+        }
+    } catch (error) {
+        console.error('Erro ao conectar ao servidor:', error);
+        alert('Erro ao conectar ao servidor.');
+    }
+}

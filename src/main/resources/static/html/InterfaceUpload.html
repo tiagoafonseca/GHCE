@@ -13,14 +13,17 @@
 <div class="upload-container1">
     <h2>Filtros Selecionados</h2>
     <div class="bigWrapperDeButoes">
-        <button>Gravidas</button>
-        <button>Gordas</button>
-        <button>Milfs</button>
-        <button>Zebras</button>
-        <button>Lesbicas</button>
+        <button>Aulas em Sobrelotação</button>
+        <button>Sem sala Atribuida</button>
+        <button>Informação em Falta</button>
+        <button>Horário PL fora de PL</button>
+        <button>Aulas ao Sábado</button>
         <div class="butoes">
             <button type="submit">Filtrar Tabela</button>
             <button onclick="clearCurrentTable()">Recalcular Qualidade</button>
+            <div>
+                <button>Gráfico de Métricas</button>
+            </div>
         </div>
     </div>
 </div>
@@ -48,7 +51,7 @@
         <button onclick="LoadHorárioSelecionado()">
             Carregar Horário
         </button>
-        <button>
+        <button onclick="ApagarHorarioDaLista()">
             Apagar Horário
         </button>
         </div>
