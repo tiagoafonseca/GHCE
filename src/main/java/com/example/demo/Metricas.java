@@ -13,20 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.*;
 import java.util.*;
 
+//Mapa de Metricas
+// 1-> Aula em Sobrelotação
+// 2-> Sem sala Atribuida ou Sala n existe
+// 3-> Informação em Falta
+// 4-> Horário PL fora de PL
+// 5-> Aula ao Sábado
+// 6-> Sala desadequada
 
 @RestController
 @RequestMapping("/api1")
 public class Metricas {
-    String nomeFile;
-    List<Sala> salas;
+    static List<Sala> salas=new ArrayList<>();
+    static List<Aula> aulas;
+    Map<Integer,List<Integer>> mapaErros = new HashMap<>(); //Primeiro é ID, depois é lista de falhas, 55 - > [1,3,5]
     public int horarioPontuacao = -1;
-    public int aulasEmSobreLotação;
-    public int aulasSemSala;
 
-
-    public String getNomeFile() {
-        return nomeFile;
-    }
 
     public List<Sala> getSalas() {
         return salas;
@@ -36,112 +38,86 @@ public class Metricas {
         return horarioPontuacao;
     }
 
-    public void setSalas(List<Sala> salas) {
-        this.salas = salas;
+    public static void setSalas(List<Sala> salas) {
+        Metricas.salas = salas;
     }
 
     public void setHorarioPontuacao(int horarioPontuacao) {
         this.horarioPontuacao = horarioPontuacao;
     }
 
-    public int getAulasEmSobreLotação() {
-        return aulasEmSobreLotação;
+    public void setMapaErros(Map<Integer,List<Integer>> mapaErros) {
+        this.mapaErros = mapaErros;
     }
 
-    public void setAulasEmSobreLotação(int aulasEmSobreLotação) {
-        this.aulasEmSobreLotação = aulasEmSobreLotação;
+    public Map<Integer,List<Integer>> getMapaErros() {
+        return mapaErros;
     }
 
-    public int getAulasSemSala() {
-        return aulasSemSala;
-    }
-
-    public void setAulasSemSala(int aulasSemSala) {
-        this.aulasSemSala = aulasSemSala;
-    }
-
-    Metricas(){
-    }
-
-    void setNomeFile(String s){
-        nomeFile = "./Horários/"+s+".json";
+    Metricas() throws IOException {
+        Metricas.setSalas(Sala.lerFicheiro("./caracterizacao.json"));
     }
 
 
-    //Refazer
-    @GetMapping("/processCaracterizacao")
-    public ResponseEntity<String> processCaracterizacaoSalas() throws IOException {
-        File caracterizacaoFile = new File("./caracterizacao.json");
-        if(caracterizacaoFile.exists()){
-            salas=Sala.lerFicheiro("./caracterizacao.json");
-            System.out.println("Foram carregadas: "+salas.size()+" salas");
+    public void tinderMatch(Aula a) {
+        if(a.getSalaDaAula()==null){
+            return;
         }
+        for (Sala s : salas) {
+            if (s.getSala().equals(a.getSalaDeAulaFull())) {
+                determineAllTheStats(a,s);
 
-
-        String filePath = "./salas.csv"; // Caminho do arquivo local
-        List<Map<String, String>> caracterizacaoList = new ArrayList<>();
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath));
-             FileWriter writer = new FileWriter(caracterizacaoFile)) {
-
-            String headerLine = br.readLine(); // Lê o cabeçalho
-            if (headerLine == null) {
-                return ResponseEntity.badRequest().body("O arquivo está vazio.");
-            }
-            String[] headers = headerLine.split(";");
-
-            String line;
-            int lineNumber = 1; // Para rastrear em qual linha estamos
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(";", -1); // "-1" mantém colunas vazias no final
-                Map<String, String> caracterizacao = new HashMap<>();
-
-                // Mapeia os valores para os cabeçalhos
-                for (int i = 0; i < headers.length; i++) {
-                    String value = (i < values.length) ? values[i].trim() : null; // Preenche com null se faltar valor
-                    caracterizacao.put(headers[i], value.isEmpty() ? null : value); // Tratamento para strings vazias
-                }
-
-                caracterizacaoList.add(caracterizacao);
-                lineNumber++;
-            }
-
-            // Escreve os dados no arquivo JSON
-            writer.write(ow.writeValueAsString(caracterizacaoList));
-            return ResponseEntity.ok("Caracterização processada e salva em JSON.");
-
-        } catch (FileNotFoundException e) {
-            return ResponseEntity.status(404).body("Arquivo de caracterização não encontrado.");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("Erro ao processar o arquivo de caracterização: " + e.getMessage());
-        }
-    }
-
-    private int countAulasSemSala(List<Map<String, Object>> horarioList, List<Map<String, Object>> caracterizacaoList) {
-        Set<String> nomesDasSalas = new HashSet<>();
-
-        // Coletar os nomes de salas existentes
-        for (Map<String, Object> sala : caracterizacaoList) {
-            String nomeSala = (String) sala.get("Nome sala");
-            if (nomeSala != null) {
-                nomesDasSalas.add(nomeSala.trim());
+                //Correr Validaçoes e Flagar aula
+                //Ligar aula a sala
+                System.out.println("It's a Match!");
+                return;
             }
         }
+        System.out.println("It's not a Match :((( " +  a.getSalaDeAulaFull());
 
-        // Contar aulas sem sala atribuída
-        int aulasSemSala = 0;
-        for (Map<String, Object> aula : horarioList) {
-            List<String> salaDaAula = (List<String>) aula.get("salaDaAula");
-            if (salaDaAula == null || salaDaAula.isEmpty() || !nomesDasSalas.contains(salaDaAula.get(0).trim())) {
-                aulasSemSala++;
-            }
-        }
-
-        System.out.println("Aulas sem sala atribuída: " + aulasSemSala);
-        return aulasSemSala;
     }
+
+
+
+    public void determineAllTheStats(Aula a,Sala s){
+        List<Integer> tempStats = new ArrayList<>();
+        int idAula= a.getId();
+        if(classInOverLotacion(a,s))
+            tempStats.add(1);
+       // if(semSalaOuSalaNaoExiste(a,s))
+         //   tempStats.add(2);
+        //if(MissingInfo(a,s))
+          //  tempStats.add(3);
+        //if(HorarioPLForaDePL(a,s))
+          //  tempStats.add(4);
+        //if(aulaAoSabado(a,s))
+          //  tempStats.add(5);
+        //if(salaDesequada(a,s))
+          //  tempStats.add(6);
+        this.mapaErros.put(idAula,tempStats);
+
+    }
+
+    public boolean aulaAoSabado(Aula aula, Sala sala){
+        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
+    }
+
+    public boolean HorarioPLForaDePL(Aula aula, Sala sala){ //Lotacion ahahahahahha
+        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
+    }
+
+    public boolean semSalaOuSalaNaoExiste(Aula aula, Sala sala){ //Lotacion ahahahahahha
+        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
+    }
+
+    public boolean MissingInfo(Aula aula, Sala sala){
+        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
+    }
+
+    public boolean classInOverLotacion(Aula aula, Sala sala){
+        return sala.getCapacidadeSala() > aula.LotaçãoInInt();
+    }
+
 
 
     private int calcularPontuacao(int aulasSobrelotacao, int aulasSemSala) {
@@ -159,68 +135,5 @@ public class Metricas {
 
 
 
-
-    @GetMapping("/evaluateOvercrowding")
-    public ResponseEntity<Integer> evaluateOvercrowding(
-            @RequestParam(defaultValue = "true") boolean overcrowding,
-            @RequestParam(defaultValue = "true") boolean noRoom) {
-
-        File horarioFile = new File(nomeFile);
-        File caracterizacaoFile = new File("./caracterizacao.json");
-
-        if (!horarioFile.exists() || !caracterizacaoFile.exists()) {
-            return ResponseEntity.status(404).body(-1);
-        }
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<Map<String, Object>> horarioList = objectMapper.readValue(horarioFile, List.class);
-            List<Map<String, Object>> caracterizacaoList = objectMapper.readValue(caracterizacaoFile, List.class);
-
-            int aulasSobrelotacao = 0;
-            int aulasSemSala = 0;
-
-            // Calcular aulas em sobrelotação
-            if (overcrowding) {
-                Map<String, Integer> capacidadeSalas = new HashMap<>();
-                for (Map<String, Object> sala : caracterizacaoList) {
-                    String nomeSala = (String) sala.get("Nome sala");
-                    String capacidadeStr = (String) sala.get("Capacidade Normal");
-                    if (nomeSala != null && capacidadeStr != null) {
-                        try {
-                            capacidadeSalas.put(nomeSala, Integer.parseInt(capacidadeStr));
-                        } catch (NumberFormatException ignored) {}
-                    }
-                }
-                for (Map<String, Object> aula : horarioList) {
-                    List<String> salaDaAula = (List<String>) aula.get("salaDaAula");
-                    List<String> lotacaoStr = (List<String>) aula.get("lotação");
-
-                    if (salaDaAula != null && !salaDaAula.isEmpty() && lotacaoStr != null && !lotacaoStr.isEmpty()) {
-                        String sala = salaDaAula.get(0);
-                        try {
-                            int lotacao = Integer.parseInt(lotacaoStr.get(0));
-                            if (capacidadeSalas.containsKey(sala) && lotacao > capacidadeSalas.get(sala)) {
-                                aulasSobrelotacao++;
-                            }
-                        } catch (NumberFormatException ignored) {}
-                    }
-                }
-            }
-
-            // Calcular aulas sem sala atribuída
-            if (noRoom) {
-                aulasSemSala = countAulasSemSala(horarioList, caracterizacaoList);
-            }
-
-            // Calcular pontuação
-            horarioPontuacao = calcularPontuacao(aulasSobrelotacao, aulasSemSala);
-
-            return ResponseEntity.ok(horarioPontuacao);
-
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(-1);
-        }
-    }
 
 }

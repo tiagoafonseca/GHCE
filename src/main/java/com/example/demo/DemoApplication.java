@@ -19,7 +19,7 @@ public class DemoApplication {
 
 	@GetMapping("/")
 	public String redirectToInterfaceUpload() throws IOException {
-		Sala.lerFicheiro("./caracterizacao.json");
+
 		ManagerHorários.loadAllHorários();
 		return "redirect:/html/InterfaceUpload.html"; // Redireciona para o arquivo HTML na pasta static
 	}

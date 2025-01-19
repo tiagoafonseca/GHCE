@@ -86,7 +86,7 @@ async function fetchScheduleQuality() {
 
 
 function renderHeaders(){
-    const headers = ["ID", "Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida","Curso"];
+    const headers = ["ID", "Curso","Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida"];
     console.log("Headers  " + headers);
 
     const headerRow = document.createElement('tr');
@@ -165,26 +165,26 @@ function clearCurrentTable(){
 
 
 // Adicionar evento ao botão "Recalcular Qualidade"
-document.getElementById('recalculateQualityButton').addEventListener('click', async () => {
+// document.getElementById('recalculateQualityButton').addEventListener('click', async () => {
     // Obter o estado das checkboxes
-    const includeOvercrowding = document.getElementById('metricOvercrowding').checked;
-    const includeNoRoom = document.getElementById('metricNoRoom').checked;
+//   const includeOvercrowding = document.getElementById('metricOvercrowding').checked;
+//  const includeNoRoom = document.getElementById('metricNoRoom').checked;
 
-    try {
+//  try {
         // Enviar as opções para o backend
-        const response = await fetch(`http://localhost:8080/api/evaluateOvercrowding?overcrowding=${includeOvercrowding}&noRoom=${includeNoRoom}`);
+//      const response = await fetch(`http://localhost:8080/api/evaluateOvercrowding?overcrowding=${includeOvercrowding}&noRoom=${includeNoRoom}`);
 
-        if (response.ok) {
-            const quality = await response.json();
-            document.getElementById('scheduleQuality').textContent = `${quality} pontos`; // Atualiza o HTML
-        } else {
-            document.getElementById('scheduleQuality').textContent = "Erro ao recalcular qualidade.";
-        }
-    } catch (error) {
-        console.error('Erro ao recalcular a pontuação:', error);
-        document.getElementById('scheduleQuality').textContent = "Erro ao recalcular qualidade.";
-    }
-});
+//      if (response.ok) {
+//          const quality = await response.json();
+//          document.getElementById('scheduleQuality').textContent = `${quality} pontos`; // Atualiza o HTML
+//      } else {
+//          document.getElementById('scheduleQuality').textContent = "Erro ao recalcular qualidade.";
+//      }
+//  } catch (error) {
+//      console.error('Erro ao recalcular a pontuação:', error);
+//      document.getElementById('scheduleQuality').textContent = "Erro ao recalcular qualidade.";
+//  }
+// });
 
 
 
@@ -195,6 +195,8 @@ function changeSelectID(id){
     this.nomeHorarioSelecionado=specificParagraph.innerHTML;
     console.log("Selecionei isto: " + this.nomeHorarioSelecionado);
 }
+
+
 
 async function LoadHorárioSelecionado() {
     const formData = new FormData();

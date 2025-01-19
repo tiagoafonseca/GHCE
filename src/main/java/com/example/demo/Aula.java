@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.util.Arrays;
@@ -43,6 +44,19 @@ public class Aula {
     @JsonSetter("curso")
     void setCurso(String[] curso) {
         this.curso = curso;
+    }
+
+
+    @JsonIgnore
+    public int LotaçãoInInt(){
+        try {
+            int teste= Integer.parseInt(lotação[0]);
+            return teste;
+        }catch (Exception e){
+            System.out.println("Erro na conversão");
+            return -1;
+        }
+
     }
 
     @JsonSetter("unidadeDeExecucao")
@@ -167,6 +181,28 @@ public class Aula {
     public String[] getSalaDaAula() {
         return salaDaAula;
     }
+
+    @JsonIgnore
+    public String getSalaDeAulaFull(){
+        String s = "";
+        for(int i=0; i<getSalaDaAula().length; i++){
+            String temp=getSalaDaAula()[i];
+
+            if(temp.equals("Audit�rio")){
+                s="Auditório";
+                continue;
+            };
+            if(temp.equals("M�rio"))
+                temp="Mário";
+            if(i==0)
+                s+=temp;
+            else
+                s+=" "+temp;
+
+        }
+        return s;
+    }
+
 
     public String[] getLotação() {
         return lotação;

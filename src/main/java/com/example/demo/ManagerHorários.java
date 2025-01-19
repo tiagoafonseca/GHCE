@@ -17,8 +17,6 @@ public class ManagerHorários {
     static List<Horário> horarios = new ArrayList<>();
 
 
-
-
     @GetMapping("/recieveListOfHorários")
     public static ResponseEntity<Map<String, Object>> loadAllHorários() {
         ObjectMapper objectMapper = new ObjectMapper();
