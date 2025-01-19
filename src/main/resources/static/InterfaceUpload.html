@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Página</title>
+    <link rel="stylesheet" href="InterfaceUpload.css">
+</head>
+<body>
+<h1>Bem-vindo ao meu Gestor de Horários!</h1>
+<p>Esta é uma página HTML servida pelo Spring Boot.</p>
+
+<div class="upload-container">
+    <h2>Carregar Horário</h2>
+    <form id="uploadForm">
+        <!-- <label for="scheduleFile">Escolha um arquivo CSV:</label> -->
+        <input type="file" id="csvFile" name="csvFile" accept=".csv" required>
+        <button type="submit">Carregar</button>
+    </form>
+
+</div>
+<div id="responseMessage"></div>
+
+<!-- Adicionar a tabela aqui -->
+<h2>Horários Processados</h2>
+<div class="buttonsDiv">
+
+    <div class="scheduelePointsDiv">
+        <div class="wrapper">
+            <button id="recalculateQualityButton">Recalcular Qualidade</button>
+        </div>
+
+        <p>Qualidade do Horário:</p>
+        <p id="scheduleQuality">A calcular...</p>
+
+        <div class="checkBoxs">
+            <label>
+                <input type="checkbox" id="metricOvercrowding" checked>
+                Incluir Aulas em Sobrelotação
+            </label>
+            <label>
+                <input type="checkbox" id="metricNoRoom" checked>
+                Incluir Aulas sem Sala Atribuída
+            </label>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+<table style="border: 1px solid black; border-collapse: collapse;">
+    <thead id="tableHeader"></thead>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<div id="root"></div>
+<script src="script.js"></script>
+</body>
+</html>
+
