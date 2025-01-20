@@ -149,7 +149,4 @@ public class Metricas {
         return pontuacao;
     }
 
-
-
-
 }

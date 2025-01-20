@@ -261,3 +261,49 @@ async function ApagarHorarioDaLista() {
         alert('Erro ao conectar ao servidor.');
     }
 }
+
+async function fetchMapaErros() {
+    let metrica1 = null;
+    let metrica2 = null;
+    let metrica3 = null;
+    let metrica4 = null;
+    let metrics = [];
+
+    try {
+        const response = await fetch('http://localhost:8080/api1/getMapaErros');
+        if (response.ok) {
+            const mapaErros = await response.json();
+            console.log('Mapa de Erros:', mapaErros);
+
+            // Iterar sobre o mapaErros
+            for (const [id, erros] of Object.entries(mapaErros)) {
+                console.log(`ID da Aula: ${id}`);
+                console.log('Erros:');
+                erros.forEach(erro => {
+                    if(erro === 1) {
+                        metrica1 += 1;
+                    } else if (erro === 2) {
+                        metrica2 += 2;
+                    } else if (erro === 3) {
+                        metrica3 += 1;
+                    } else if (erro ===4) {
+                        metrica4 += 1;
+                    }
+                    console.log("Métricas Contadas: ",metrica1, metrica2, metrica3, metrica4)
+                });
+            }
+            metrics = [metrica1, metrica2, metrica3, metrica4];
+            return metrics;
+
+        } else {
+            console.error('Erro ao buscar mapa de erros:', response.status);
+        }
+    } catch (error) {
+        console.error('Erro de conexão:', error);
+    }
+}
+
+
+async function GerarGraficosMetricas() {
+
+}

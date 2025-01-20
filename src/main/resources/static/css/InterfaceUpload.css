@@ -40,6 +40,12 @@ body {
     width: 100%;
 }
 
+.bigWrapperDeButoes button:hover {
+    background-color: white;
+    transition: 0.5s;
+
+}
+
 .bigWrapperDeButoes button {
     margin: 0;
     background-color: lightgrey;
@@ -48,12 +54,34 @@ body {
     transition: 0.5s;
 }
 
-.butoesWrappers .butoes
+.bigWrapperDeButoes .butoes {
+    display: flex;
+    flex-direction: column; /* Coloca os elementos em uma coluna */
+    align-items: center; /* Centraliza os botões horizontalmente */
+    gap: 1em; /* Espaçamento entre os elementos */
+}
 
-.bigWrapperDeButoes button:hover {
+.bigWrapperDeButoes .butoes .botoes-linha {
+    display: flex;
+    width: 100%;
+    gap: 1em; /* Espaçamento entre os botões na linha */
+    justify-content: center; /* Centraliza os botões */
+}
+
+.bigWrapperDeButoes .butoes .botao-vertical button {
+    background-color: lightgrey;
+    width: 100%;
+    border: none;
+    font-weight: normal;
+    padding: 0.4em 1em;
+    font-size: 0.95rem;
+    transition: background-color 0.5s;
+
+}
+
+.bigWrapperDeButoes .butoes .botao-vertical button:hover {
     background-color: white;
-    transition: 0.5s;
-
+    transition: background-color 0.5s;;
 }
 
 
