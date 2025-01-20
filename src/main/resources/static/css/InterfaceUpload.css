@@ -210,7 +210,7 @@ td {
 .buttonsDiv {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
 
     width: 80%;
 }
@@ -423,3 +423,43 @@ textarea {
     transition: 0.5s;
 }
 
+.editLineWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    text-align: center;
+    gap: 10px;
+}
+
+.innerDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.innerDiv label{
+    width: 80px;
+}
+
+.innerDiv input{
+    width: 220px;
+}
+
+.innerDiv select{
+    width: 225px;
+}
+
+
+
+.editLineWrapperBig{
+    display: flex;
+    flex-direction: row;
+    gap: 10px   ;
+
+}
+.butaoEditar{
+    padding:0px 10px 0px 10px;
+
+}

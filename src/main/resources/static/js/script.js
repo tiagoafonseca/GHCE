@@ -83,7 +83,7 @@ async function fetchScheduleQuality() {
 
 
 function renderHeaders(){
-    const headers = ["ID", "Curso","Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Pedida", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida"];
+    const headers = ["ID", "Curso","Unidade de Execução", "Turno", "Turma", "Inscritos no Turno", "Dia da Semana", "Início", "Fim", "Dia", "Caracteristicas da Sala Reais", "Sala de Aula", "Lotação", "Caracteristicas Reais da Sala Pedida"];
     console.log("Headers  " + headers);
 
     const headerRow = document.createElement('tr');
@@ -153,11 +153,94 @@ function runSection(section){
 
 }
 
-function clearCurrentTable(){
-    tableBody.innerHTML = "";
-    console.log("Limpei");
+
+
+function changePlaceHolder(){
+
+
 }
 
+
+
+async function changeAttribute() {
+    var idAula = document.getElementById("idDaAula").value;
+    var idReal=idAula-1;
+    var select = document.getElementById("atriubutos");
+    var info = document.getElementById("info").value;
+    const idAtributo = select.value;
+
+    const formData = new FormData();
+    formData.append('idAula', idReal);
+    formData.append('idParametro', idAtributo);
+    formData.append('newInfo', info);
+    console.log(idAula)
+    console.log(idAtributo)
+    console.log(info)
+
+    var response = await fetch('http://localhost:8080/api2/editLine', {method: 'POST', body: formData});
+    if (!response.ok) {
+        console.error('Erro ao editar');
+     }
+        switch (idAtributo) {
+            case "1":
+                data.aulas[idReal].curso = info;
+                console.log("Aqui")
+                runSection(currentSection);
+                break;
+            case "2":
+                data.aulas[idReal].unidadeDeExecucao = info;
+                console.log("Aqui 2")
+                runSection(currentSection);
+                break;
+            case "3":
+                data.aulas[idReal].turno = info;
+                console.log("Aqui 3")
+                runSection(currentSection);
+                break;
+            case "4":
+                data.aulas[idReal].turma = info;
+                runSection(currentSection);
+                break;
+            case "5":
+                data.aulas[idReal].inscritosNoTurno = info;
+                runSection(currentSection);
+                console.log("Aqui 3")
+                break;
+            case "6":
+                data.aulas[idReal].diaDaSemana = info;
+                runSection(currentSection);
+                break;
+            case "7":
+                data.aulas[idReal].inicio = info;
+                runSection(currentSection);
+                break;
+            case "8":
+                data.aulas[idReal].fim = info;
+                runSection(currentSection);
+                break;
+            case "9":
+                data.aulas[idReal].dia = info;
+                runSection(currentSection);
+                break;
+            case "10":
+                data.aulas[idReal].caracteristicasDaSalaPedidaParaAula = info;
+                runSection(currentSection);
+                break;
+            case "11":
+                data.aulas[idReal].salaDaAula = info;
+                runSection(currentSection);
+                break;
+            default:
+                console.log("não entrei chefe")
+
+        }
+    }
+
+
+    function clearCurrentTable() {
+        tableBody.innerHTML = "";
+        console.log("Limpei");
+    }
 
 
 // Adicionar evento ao botão "Recalcular Qualidade"
@@ -167,7 +250,7 @@ function clearCurrentTable(){
 //  const includeNoRoom = document.getElementById('metricNoRoom').checked;
 
 //  try {
-        // Enviar as opções para o backend
+    // Enviar as opções para o backend
 //      const response = await fetch(`http://localhost:8080/api/evaluateOvercrowding?overcrowding=${includeOvercrowding}&noRoom=${includeNoRoom}`);
 
 //      if (response.ok) {
@@ -183,127 +266,122 @@ function clearCurrentTable(){
 // });
 
 
-let IdHorarioSelecionado = null;  // variável global que guarda o ID do horário selecionado
-let nomeHorarioSelecionado = "";  // variável global que guarda o Nome do horário selecionado
+    let IdHorarioSelecionado = null;  // variável global que guarda o ID do horário selecionado
+    let nomeHorarioSelecionado = "";  // variável global que guarda o Nome do horário selecionado
 
-function changeSelectID(id){
-    const div = document.getElementById(id);
-    const specificParagraph = div.querySelector('#nomeHorario');
-    this.nomeHorarioSelecionado=specificParagraph.innerHTML;
-    IdHorarioSelecionado = id;
-    nomeHorarioSelecionado = this.nomeHorarioSelecionado;
-    console.log("Selecionei isto: " + this.nomeHorarioSelecionado);
-}
-
-
-
-async function LoadHorárioSelecionado() {
-    const formData = new FormData();
-    formData.append('nomeHorario', this.nomeHorarioSelecionado);
-    console.log("Enviei "+this.nomeHorarioSelecionado);
-    var horario = await fetch('http://localhost:8080/api2/getSelectedHorario', {method: 'POST', body: formData});
-    horarioObjeto = await horario.json();
-    this.data=horarioObjeto;
-    this.data.aulas=data.aulas.slice(1);
-    if(!this.headersLoaded){
-        renderHeaders();
-        this.headersLoaded=true;
+    function changeSelectID(id) {
+        const div = document.getElementById(id);
+        const specificParagraph = div.querySelector('#nomeHorario');
+        this.nomeHorarioSelecionado = specificParagraph.innerHTML;
+        IdHorarioSelecionado = id;
+        nomeHorarioSelecionado = this.nomeHorarioSelecionado;
+        console.log("Selecionei isto: " + this.nomeHorarioSelecionado);
     }
-    determineLastSection();
-    runSection(0);
-    document.getElementById("nomeHorariobig").innerHTML=this.data.name;
 
-}
+
+    async function LoadHorárioSelecionado() {
+        const formData = new FormData();
+        formData.append('nomeHorario', this.nomeHorarioSelecionado);
+        console.log("Enviei " + this.nomeHorarioSelecionado);
+        var horario = await fetch('http://localhost:8080/api2/getSelectedHorario', {method: 'POST', body: formData});
+        horarioObjeto = await horario.json();
+        this.data = horarioObjeto;
+        this.data.aulas = data.aulas.slice(1);
+        if (!this.headersLoaded) {
+            renderHeaders();
+            this.headersLoaded = true;
+        }
+        determineLastSection();
+        runSection(0);
+        document.getElementById("nomeHorariobig").innerHTML = this.data.name;
+
+    }
 
 // BUG - ao dar refresh o horário volta
-/* async function ApagarHorarioDaLista() {
-    if (!IdHorarioSelecionado) {
-        alert('Nenhum horário selecionado!');
-        return;
-    }
-    const elemento = document.getElementById(IdHorarioSelecionado);
-    elemento.remove();
-    IdHorarioSelecionado = null;
-    console.log('Horário removido.');
-} */
-
-async function ApagarHorarioDaLista() {
-    if (!IdHorarioSelecionado) {
-        alert('Nenhum horário selecionado!');
-        return;
-    }
-
-    const nomeHorario = nomeHorarioSelecionado;
-    console.log(`Tentando apagar o horário: ${nomeHorario}`);
-
-    try {
-        const response = await fetch('http://localhost:8080/api2/deleteHorario', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({ nomeHorario }),
-        });
-
-        if (response.ok) {
-            const elemento = document.getElementById(IdHorarioSelecionado);
-            elemento.remove();
-            IdHorarioSelecionado = null;
-            nomeHorarioSelecionado = null;
-            console.log(`Horário ${nomeHorario} apagado com sucesso!`);
-        } else {
-            const errorMessage = await response.text();
-            console.error(`Erro ao apagar o horário: ${errorMessage}`);
-            alert(`Erro: ${errorMessage}`);
+    /* async function ApagarHorarioDaLista() {
+        if (!IdHorarioSelecionado) {
+            alert('Nenhum horário selecionado!');
+            return;
         }
-    } catch (error) {
-        console.error('Erro ao conectar ao servidor:', error);
-        alert('Erro ao conectar ao servidor.');
-    }
-}
+        const elemento = document.getElementById(IdHorarioSelecionado);
+        elemento.remove();
+        IdHorarioSelecionado = null;
+        console.log('Horário removido.');
+    } */
 
-async function fetchMapaErros() {
-    let metrica1 = null;
-    let metrica2 = null;
-    let metrica3 = null;
-    let metrica4 = null;
-    let metrics = [];
+    async function ApagarHorarioDaLista() {
+        if (!IdHorarioSelecionado) {
+            alert('Nenhum horário selecionado!');
+            return;
+        }
 
-    try {
-        const response = await fetch('http://localhost:8080/api1/getMapaErros');
-        if (response.ok) {
-            const mapaErros = await response.json();
-            console.log('Mapa de Erros:', mapaErros);
+        const nomeHorario = nomeHorarioSelecionado;
+        console.log(`Tentando apagar o horário: ${nomeHorario}`);
 
-            // Iterar sobre o mapaErros
-            for (const [id, erros] of Object.entries(mapaErros)) {
-                console.log(`ID da Aula: ${id}`);
-                console.log('Erros:');
-                erros.forEach(erro => {
-                    if(erro === 1) {
-                        metrica1 += 1;
-                    } else if (erro === 2) {
-                        metrica2 += 2;
-                    } else if (erro === 3) {
-                        metrica3 += 1;
-                    } else if (erro ===4) {
-                        metrica4 += 1;
-                    }
-                    console.log("Métricas Contadas: ",metrica1, metrica2, metrica3, metrica4)
-                });
+        try {
+            const response = await fetch('http://localhost:8080/api2/deleteHorario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({nomeHorario}),
+            });
+
+            if (response.ok) {
+                const elemento = document.getElementById(IdHorarioSelecionado);
+                elemento.remove();
+                IdHorarioSelecionado = null;
+                nomeHorarioSelecionado = null;
+                console.log(`Horário ${nomeHorario} apagado com sucesso!`);
+            } else {
+                const errorMessage = await response.text();
+                console.error(`Erro ao apagar o horário: ${errorMessage}`);
+                alert(`Erro: ${errorMessage}`);
             }
-            metrics = [metrica1, metrica2, metrica3, metrica4];
-            return metrics;
-
-        } else {
-            console.error('Erro ao buscar mapa de erros:', response.status);
+        } catch (error) {
+            console.error('Erro ao conectar ao servidor:', error);
+            alert('Erro ao conectar ao servidor.');
         }
-    } catch (error) {
-        console.error('Erro de conexão:', error);
     }
-}
 
+    async function fetchMapaErros() {
+        let metrica1 = null;
+        let metrica2 = null;
+        let metrica3 = null;
+        let metrica4 = null;
+        let metrics = [];
 
-async function GerarGraficosMetricas() {
+        try {
+            const response = await fetch('http://localhost:8080/api1/getMapaErros');
+            if (response.ok) {
+                const mapaErros = await response.json();
+                console.log('Mapa de Erros:', mapaErros);
+
+                // Iterar sobre o mapaErros
+                for (const [id, erros] of Object.entries(mapaErros)) {
+                    console.log(`ID da Aula: ${id}`);
+                    console.log('Erros:');
+                    erros.forEach(erro => {
+                        if (erro === 1) {
+                            metrica1 += 1;
+                        } else if (erro === 2) {
+                            metrica2 += 2;
+                        } else if (erro === 3) {
+                            metrica3 += 1;
+                        } else if (erro === 4) {
+                            metrica4 += 1;
+                        }
+                        console.log("Métricas Contadas: ", metrica1, metrica2, metrica3, metrica4)
+                    });
+                }
+                metrics = [metrica1, metrica2, metrica3, metrica4];
+                return metrics;
+
+            } else {
+                console.error('Erro ao buscar mapa de erros:', response.status);
+            }
+        } catch (error) {
+            console.error('Erro de conexão:', error);
+        }
 
 }

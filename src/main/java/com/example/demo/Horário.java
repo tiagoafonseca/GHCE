@@ -2,6 +2,8 @@ package com.example.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +11,18 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@RestController
+@RequestMapping("/api1")
+
 public class Horário {
     String date;
     String name;
     List<Aula> aulas= new ArrayList<>();
     Metricas qualidade;
+
+
+
+
 
 
 
@@ -75,7 +84,6 @@ public class Horário {
 
     public String writeMySelf() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-
         String jsonString = mapper.writeValueAsString(this);
         return jsonString;
     }

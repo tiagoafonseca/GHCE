@@ -65,9 +65,40 @@
 <h2 id="nomeHorariobig">Horários Processados</h2>
 <div class="buttonsDiv">
     <div class="scheduelePointsDiv">
-        <p>Qualidade do Horário:</p>
+        <p>Qualidade do Horário:</p><br>
         <p id="scheduleQuality">A calcular...</p>
     </div>
+    <div class="editLineWrapperBig">
+    <div class="editLineWrapper">
+        <div class="innerDiv">
+        <label>ID da Aula:</label>
+        <input type="text" id="idDaAula">
+        </div>
+        <div class="innerDiv">
+        <label>Parametro:</label>
+        <select name="atributos" id="atriubutos">
+            <option value="1">Curso</option>
+            <option value="2">Unidade de Execução</option>
+            <option value="3">Turno</option>
+            <option value="4">Turma</option>
+            <option value="5">Inscritos no Turno</option>
+            <option value="6">Dia da Semana</option>
+            <option value="7">Início</option>
+            <option value="8">Fim</option>
+            <option value="9">Dia</option>
+            <option value="10">Sala de aula</option>
+            <option value="11">Caracteristicas Sala Pedidas</option>
+        </select>
+        </div>
+            <div class="innerDiv">
+            <label >Informação nova:</label>
+            <input type="text" id="info" name="fname">
+            </div>
+        </div>
+        <button class="butaoEditar" onclick="changeAttribute()">Editar</button>
+    </div>
+
+
     <div class="sectionWrapper">
         <img onclick="backPage()" src="../imgs/left-arrow.png">
         <p>Page: </p>

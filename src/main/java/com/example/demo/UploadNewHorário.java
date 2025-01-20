@@ -74,6 +74,8 @@ public class UploadNewHorário {
         myWriter.write(h.writeMySelf());
         myWriter.flush();
         myWriter.close();
+        ManagerHorários.getHorarios().add(h);
+        ManagerHorários.selectOne=h;
         if (!horario.exists()) {
             return ResponseEntity.notFound().build(); // Return 404 if file doesn't exist
         }
