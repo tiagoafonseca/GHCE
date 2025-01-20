@@ -30,6 +30,7 @@ public class ManagerHorários {
 
     @GetMapping("/recieveListOfHorários")
     public static ResponseEntity<Map<String, Object>> loadAllHorários() {
+        horarios.clear();
         ObjectMapper objectMapper = new ObjectMapper();
         String[] qualidades;
         String[] nomes;
@@ -218,10 +219,9 @@ public class ManagerHorários {
         }
     }
 
-
-
-
-
+    public static List<Horário> getHorariosCarregados() {
+        return horarios;
+    }
 
 
 }

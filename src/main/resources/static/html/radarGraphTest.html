@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gráfico de Métricas</title>
-    <script src="../js/radarGraph.js" defer></script> <!-- Script para gráficos -->
     <script src="../js/script.js" defer></script> <!-- Script para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<h1 align="center">Gráfico de Métricas</h1>
-<div id="chartContainer" style="width: 50%; margin: auto;">
-    <canvas id="radarChart"></canvas>
-</div>
-<div align="center">
-    <button onclick="window.location.href='/html/InterfaceUpload.html'">Voltar para a página anterior</button>
-    <button onclick="fetchMapaErros()">Teste</button>
-</div>
+    <h1 align="center">Gráfico de Métricas</h1>
+    <div id="chartContainer" style="width: 50%; margin: auto;">
+        <canvas id="radarChart"></canvas>
+    </div>
+    <div class="botao1_graphRadar" align="center">
+        <button onclick="AuxGerarGraficosMetricas()">Gerar Gráfico</button>
+    </div>
+    <div class="botao2_graphRadar" align="center">
+        <button onclick="window.location.href='/html/InterfaceUpload.html'">Voltar para a página anterior</button>
+    </div>
 </body>
 </html>
