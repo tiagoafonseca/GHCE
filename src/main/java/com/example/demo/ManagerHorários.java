@@ -72,7 +72,6 @@ public class ManagerHorários {
             response.put("datas", datas);
         }
 
-        System.out.println("Tamanho da minha pica: " + horarios.size() + "km");
         return ResponseEntity.ok(response);
     }
 
@@ -94,7 +93,6 @@ public class ManagerHorários {
     public ResponseEntity<String> editLineAPI(@RequestParam("idAula") int idAula, @RequestParam("idParametro") int idParametroAlterar, @RequestParam("newInfo") String newInfo) throws IOException {
         System.out.println(1);
         Aula a;
-        idAula=idAula+1;
         switch (idParametroAlterar) {
             case 1:
                 a=getAulaWithID(idAula,selectOne);
@@ -194,6 +192,24 @@ public class ManagerHorários {
         }
 
         return ResponseEntity.status(404).body("Arquivo do horário não encontrado no sistema de arquivos.");
+    }
+
+
+
+    @GetMapping("/updateQualidade")
+    public void updateQualidade() throws IOException {
+        File horario=new File("./Horários/"+selectOne.getName()+".json");
+        FileWriter myWriter = new FileWriter(horario);
+        Metricas metricas = new Metricas();
+        for(Aula a : selectOne.getAulas()){
+            metricas.tinderMatch(a);
+        }
+        metricas.calcularPontuacao();
+        selectOne.setQualidade(metricas);
+
+        myWriter.write(selectOne.writeMySelf());
+        myWriter.flush();
+        myWriter.close();
     }
 
 

@@ -36,13 +36,13 @@ public class MetricasController {
                 for (Integer chave : mapaErros.keySet()) {
                     List<Integer> listaDeErros = mapaErros.get(chave);
 
-                    if (listaDeErros.contains(1) && arrayOfMetrics[0] != 1000) {
+                    if (listaDeErros.contains(1) && arrayOfMetrics[0] != 500) {
                         arrayOfMetrics[0]++;
-                    } else if (listaDeErros.contains(2) && arrayOfMetrics[1] != 1000) {
+                    } else if (listaDeErros.contains(2) && arrayOfMetrics[1] != 500) {
                         arrayOfMetrics[1]++;
-                    } else if (listaDeErros.contains(3) && arrayOfMetrics[2] != 1000) {
+                    } else if (listaDeErros.contains(3) && arrayOfMetrics[2] != 500) {
                         arrayOfMetrics[2]++;
-                    } else if (listaDeErros.contains(5) && arrayOfMetrics[3] != 1000) {
+                    } else if (listaDeErros.contains(5) && arrayOfMetrics[3] != 500) {
                         System.out.println("Entrei");
                         arrayOfMetrics[3]++;
                     }

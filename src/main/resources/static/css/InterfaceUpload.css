@@ -40,19 +40,7 @@ body {
     width: 100%;
 }
 
-.bigWrapperDeButoes button:hover {
-    background-color: white;
-    transition: 0.5s;
 
-}
-
-.bigWrapperDeButoes button {
-    margin: 0;
-    background-color: lightgrey;
-    border: none;
-    font-weight: normal;
-    transition: 0.5s;
-}
 
 .bigWrapperDeButoes .butoes {
     display: flex;
@@ -80,7 +68,7 @@ body {
 }
 
 .bigWrapperDeButoes .butoes .botao-vertical button:hover {
-    background-color: white;
+    background-color: #ededed;
     transition: background-color 0.5s;;
 }
 
@@ -208,11 +196,7 @@ td {
 }
 
 .buttonsDiv {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
 
-    width: 80%;
 }
 
 .checkBoxs {
@@ -322,14 +306,28 @@ textarea {
     width: 100%;
     max-height: 200px; /* Define uma altura máxima */
     overflow-y: auto; /* Ativa o scroll vertical */
-    background-color: lightpink; /* Cor de fundo para destacar */
+    background-color: #ffffff; /* Cor de fundo para destacar */
 }
 
 .upload-container3 .horariosContainer:hover {
-    background-color: #ffffff;
+    background-color: rgba(220, 215, 80, 0.68);
     transition: 0.5s;
 }
 
+
+.buttonsDivOn{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.buttonsDivOff{
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+}
 
 .sectionWrapper {
     display: flex;
@@ -382,7 +380,7 @@ textarea {
     align-items: center;
     text-align: center;
     font-weight: 600;
-    background-color: #e1a1a1;
+    background-color: #dcd750;
 
 }
 
@@ -463,3 +461,35 @@ textarea {
     padding:0px 10px 0px 10px;
 
 }
+
+
+.botoes-linha button{
+    margin: 0;
+    background-color: lightgrey;
+    border: none;
+    font-weight: normal;
+    transition: 0.5s;
+}
+
+.botoes-linha button:hover{
+    background-color: #e8e8e8;
+    transition: 0.5s;
+}
+
+
+
+.divOn{
+    background-color: white;
+    transition: 0.5s;
+    border-width: 1px;
+    border-color:lightgrey ;
+}
+
+.divOff{
+    margin: 0;
+    background-color: lightgrey;
+    border: none;
+    font-weight: normal;
+    transition: 0.5s;
+}
+

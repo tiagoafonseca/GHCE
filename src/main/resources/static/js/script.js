@@ -4,6 +4,11 @@ this.currentSection=0;
 this.idDoHorarioSelecionado="";
 this.nomeHorarioSelecionado="";
 this.headersLoaded=false;
+aulasEmSb=false;
+aulasSemSala=false;
+aulasAoSab=false;
+missingInfo=false;
+this.displayBoolean=false;
 
 document.getElementById('uploadForm').onsubmit = async (event) => {
     event.preventDefault();
@@ -15,6 +20,11 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
     const file = fileInput.files[0];
     const responseMessage = document.getElementById('responseMessage');
     const nome = document.getElementById("nomeHorario").value
+
+
+
+
+
 
 
     if (file) {
@@ -30,11 +40,11 @@ document.getElementById('uploadForm').onsubmit = async (event) => {
                 this.data=horarioRecebido;
 
                 console.log("Aqui crl"+this.data.qualidade.horarioPontuacao);
-                document.getElementById('scheduleQuality').textContent = `${this.data.qualidade.horarioPontuacao} pontos`;
+                document.getElementById('scheduleQuality').textContent = `${this.data.qualidade.horarioPontuacao} %`;
                 console.log(horarioRecebido); // Verifica o formato dos dados
                 console.log("qualidade"+this.data.qualidade.horarioPontuacao)
                 responseMessage.innerHTML = `<p style="color:black;">Horário Carregado com sucesso!</p>`;
-
+                changeDisplayifItemMenus();
                 //renderTable(jsonResponse); // Construir a tabela
                 determineLastSection();
                 if(!headersLoaded) {
@@ -93,7 +103,6 @@ function renderHeaders(){
         headerRow.appendChild(th);
     });
     tableHeader.appendChild(headerRow);
-
 }
 
 
@@ -195,6 +204,27 @@ function changeSelectID(id){
     console.log("Selecionei isto: " + this.nomeHorarioSelecionado);
 }
 
+async function LoadHorárioSelecionadoV2() {
+    const formData = new FormData();
+    formData.append('nomeHorario', data.name);
+    console.log("Enviei "+this.nomeHorarioSelecionado);
+    var horario = await fetch('http://localhost:8080/api2/getSelectedHorario', {method: 'POST', body: formData});
+    horarioObjeto = await horario.json();
+    this.data=horarioObjeto;
+    setQualidade(data.qualidade.horarioPontuacao+"%")
+    //this.data.aulas=data.aulas.slice(1);
+    changeDisplayifItemMenus();
+    if(!this.headersLoaded){
+        renderHeaders();
+
+        this.headersLoaded=true;
+    }
+    determineLastSection();
+    runSection(0);
+    document.getElementById("nomeHorariobig").innerHTML=this.data.name;
+
+}
+
 
 
 async function LoadHorárioSelecionado() {
@@ -204,9 +234,12 @@ async function LoadHorárioSelecionado() {
     var horario = await fetch('http://localhost:8080/api2/getSelectedHorario', {method: 'POST', body: formData});
     horarioObjeto = await horario.json();
     this.data=horarioObjeto;
-    this.data.aulas=data.aulas.slice(1);
+    setQualidade(data.qualidade.horarioPontuacao+"%")
+    //this.data.aulas=data.aulas.slice(1);
+    changeDisplayifItemMenus();
     if(!this.headersLoaded){
         renderHeaders();
+
         this.headersLoaded=true;
     }
     determineLastSection();
@@ -226,6 +259,94 @@ async function LoadHorárioSelecionado() {
     IdHorarioSelecionado = null;
     console.log('Horário removido.');
 } */
+
+
+
+function paintErros(){
+    clearCss()
+    const table = document.getElementById("tabela");
+    let rows = table.querySelector("tbody").getElementsByTagName("tr");
+    console.log("Pagina atual: "+currentSection);
+    for(let i=(currentSection * 500); i<499+(currentSection*500); i++ ){
+        let erros=data.qualidade.mapaErros[i];
+        let id=false;
+        if(erros.includes(1) && aulasEmSb){
+            id=true;
+             paintSobreLotaçao(rows[i-(currentSection*500)])
+        }
+        else if(erros.includes(2) && aulasSemSala){
+            id=true;
+            console.log(i);
+            paintSemSala(rows[i-(currentSection*500)])
+        }
+        else if(erros.includes(3) && missingInfo){
+
+            id=true;
+            paintMissingInfo(rows[i-(currentSection*500)])
+        }
+        else if(erros.includes(5) && aulasAoSab){
+
+            id=true;
+            paintAulasAoSabado(rows[i-(currentSection*500)])
+        }
+        if(id){
+            paintId(rows[i-(currentSection*500)])
+        }
+        id=false;
+    }
+
+}
+
+function paintSobreLotaçao(row){
+    let element= row.getElementsByTagName("td")[12];
+    element.style.backgroundColor= 'rgba(253,39,39,0.69)';
+}
+
+function paintId(row){
+    let element= row.getElementsByTagName("td")[0];
+    element.style.backgroundColor= 'rgba(253,39,39,0.69)';
+}
+
+function paintAulasAoSabado(row){
+    let element= row.getElementsByTagName("td")[6];
+
+    element.style.backgroundColor= 'rgba(253,39,39,0.69)';
+}
+
+function paintSemSala(row){
+    console.log(row);
+    let element= row.getElementsByTagName("td")[11];
+    element.style.backgroundColor= 'rgba(253,39,39,0.69)';
+}
+
+
+//Ta bem
+function paintMissingInfo(row){
+    row.style.backgroundColor= 'rgba(255,249,0,0.65)';
+}
+
+function setQualidade(qualidade){
+    var qualidadeD=document.getElementById("scheduleQuality");
+    qualidadeD.innerHTML=qualidade;
+}
+
+function clearCss(){
+    const table = document.getElementById("tabela");
+    let rows = table.querySelector("tbody").getElementsByTagName("tr");
+    console.log("Pagina atual: "+currentSection);
+    for(let i=(currentSection * 500); i<499+(currentSection*500); i++ ){
+        for(let j=0; j<14; j++){
+            let element= rows[i-(currentSection*500)].getElementsByTagName("td")[j];
+            if(i%2==0)
+                element.style.backgroundColor= '#fff';
+            else
+                element.style.backgroundColor= '#b8b8b8';
+
+
+        }
+    }
+    }
+
 
 async function ApagarHorarioDaLista() {
     if (!IdHorarioSelecionado) {
@@ -263,6 +384,7 @@ async function ApagarHorarioDaLista() {
 }
 
 
+
 async function AuxGerarGraficosMetricas() {
     try {
         const response = await fetch('http://localhost:8080/api1/getMetricas');
@@ -296,8 +418,8 @@ function criarGraficosRadar(numHorariosCarregados, listaDeArraysMetricas) {
         label: `Horário ${index + 1}`, // Rótulo para identificar cada dataset
         fill: true,
         data: arrayMetricas,
-        backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, 99, 132, 0.2)`, // Cor aleatória para cada dataset
-        borderColor: `rgba(${Math.floor(Math.random() * 255)}, 99, 132, 1)`,
+        backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, 100, 200, 0.2)`, // Cor aleatória para cada dataset
+        borderColor: `rgba(${Math.floor(Math.random() * 255)}, 50, 100, 1)`,
         borderWidth: 2,
     }));
 
@@ -344,7 +466,7 @@ function criarGraficosRadar(numHorariosCarregados, listaDeArraysMetricas) {
 
 async function changeAttribute() {
     var idAula = document.getElementById("idDaAula").value;
-    var idReal=idAula-1;
+    var idReal=idAula;
     var select = document.getElementById("atriubutos");
     var info = document.getElementById("info").value;
     const idAtributo = select.value;
@@ -416,6 +538,46 @@ async function changeAttribute() {
     }
 }
 
+function changeDisplayifItemMenus() {
+    if (!this.displayBoolean) {
+    const div=document.getElementById('itemsMenu');
+    div.classList.toggle('buttonsDivOff');
+    div.classList.toggle('buttonsDivOn');
+        this.displayBoolean=true;
+    }
+}
+
+
+function changeState(div){
+    console.log("Tou aqui");
+    div.classList.toggle('divOn');
+    div.classList.toggle('divOff');
+    console.log(div.id);
+    switch (div.id){
+        case "aulasEmSb":
+            aulasEmSb=!aulasEmSb;
+            console.log(aulasEmSb)
+            break
+        case "aulasSemSala":
+            aulasSemSala=!aulasSemSala;
+            break
+        case "aulasAoSab":
+            aulasAoSab=!aulasAoSab;
+            break
+        case "missingInfo":
+            missingInfo=!missingInfo;
+            break
+
+
+
+    }
+}
+
+async function updateQualidade() {
+    await fetch('http://localhost:8080/api2/updateQualidade');
+    //LoadHorárioSelecionadoV2();
+    alert("Atualizado com Sucesso!");
+}
 
 // Chama a função automaticamente ao carregar a página
 //window.onload = AuxGerarGraficosMetricas;

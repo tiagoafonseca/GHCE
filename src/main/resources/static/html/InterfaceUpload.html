@@ -13,15 +13,14 @@
 <div class="upload-container1">
     <h2>Filtros Selecionados</h2>
     <div class="bigWrapperDeButoes">
-        <button>Aulas em Sobrelotação</button>
-        <button>Sem sala Atribuida</button>
-        <button>Informação em Falta</button>
-        <button>Horário PL fora de PL</button>
-        <button>Aulas ao Sábado</button>
+        <button class="divOff"  id="aulasEmSb" onclick="changeState(this)">Aulas em Sobrelotação</button>
+        <button  class="divOff" id="aulasSemSala" onclick="changeState(this)">Sem sala Atribuida</button>
+        <button class="divOff" id="missingInfo" onclick="changeState(this)">Informação em Falta</button>
+         <button class="divOff" id="aulasAoSab" onclick="changeState(this)">Aulas ao Sábado</button>
         <div class="butoes">
             <div class="botoes-linha">
-                <button type="submit">Filtrar Tabela</button>
-                <button onclick="clearCurrentTable()">Recalcular Qualidade</button>
+                <button onclick="paintErros()">Filtrar Tabela</button>
+                <button onclick="updateQualidade()">Recalcular Qualidade</button>
             </div>
             <div class="botao-vertical">
                 <button onclick="window.location.href='/html/radarGraphTest.html'">Gráfico de Métricas</button>
@@ -62,8 +61,8 @@
 <div id="responseMessage"></div>
 
 <!-- Adicionar a tabela aqui -->
-<h2 id="nomeHorariobig">Horários Processados</h2>
-<div class="buttonsDiv">
+<h2 id="nomeHorariobig"></h2>
+<div id="itemsMenu" class="buttonsDivOff">
     <div class="scheduelePointsDiv">
         <p>Qualidade do Horário:</p><br>
         <p id="scheduleQuality">A calcular...</p>
@@ -112,7 +111,7 @@
 
 </div>
 
-<table style="border: 1px solid black; border-collapse: collapse;">
+<table id="tabela" style="border: 1px solid black; border-collapse: collapse;">
     <thead id="tableHeader"></thead>
     <tbody id="tableBody"></tbody>
 </table>

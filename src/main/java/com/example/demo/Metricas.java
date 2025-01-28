@@ -25,16 +25,20 @@ import java.util.*;
 @RequestMapping("/api1")
 public class Metricas {
     static List<Sala> salas=new ArrayList<>();
-    static List<Aula> aulas;
     Map<Integer,List<Integer>> mapaErros = new HashMap<>(); //Primeiro é ID, depois é lista de falhas, 55 - > [1,3,5]
-    public int horarioPontuacao = -1;
+    public double horarioPontuacao = -1;
+    int[]arrayOfErros =new int[4];
 
+
+    public int[] getArrayOfErros() {
+        return arrayOfErros;
+    }
 
     public List<Sala> getSalas() {
         return salas;
     }
 
-    public int getHorarioPontuacao(){
+    public double getHorarioPontuacao(){
         return horarioPontuacao;
     }
 
@@ -99,6 +103,7 @@ public class Metricas {
           //  tempStats.add(6);
 
         tempStats.add(2);
+
         return tempStats;
     }
      //A FUNCIONAR
@@ -136,17 +141,32 @@ public class Metricas {
 
 
 
-    private int calcularPontuacao(int aulasSobrelotacao, int aulasSemSala) {
-        int pontuacao = 100;
+    public void calcularPontuacao() {
+        System.out.println("Tamanho:"+mapaErros.keySet().size());
+        for (Integer chave : mapaErros.keySet()) {
+                System.out.println("Chave:"+chave);
+                List<Integer> listaDeErros = mapaErros.get(chave);
+                System.out.println("Chave 2:"+mapaErros.get(chave));
+                if (listaDeErros.contains(1) && arrayOfErros[0] != 500) {
+                    arrayOfErros[0]++;
 
-        // Perde 1 ponto a cada 185 aulas em sobrelotação
-        pontuacao -= aulasSobrelotacao / 185;
+                } else if (listaDeErros.contains(2) && arrayOfErros[1] != 500) {
+                    arrayOfErros[1]++;
 
-        // Perde 1 ponto a cada 185 aulas sem sala atribuída
-        pontuacao -= aulasSemSala / 185;
+                } else if (listaDeErros.contains(3) && arrayOfErros[2] != 500) {
+                    arrayOfErros[2]++;
 
-        // Garantir que a pontuaçã o não seja negativa
-        return pontuacao;
+                } else if (listaDeErros.contains(5) && arrayOfErros[3] != 500) {
+                    arrayOfErros[3]++;
+
+                }
+                System.out.println(arrayOfErros[0] + " "+arrayOfErros[1] +" "+arrayOfErros[2] +" "+arrayOfErros[3]);
+                double pontuacao=0.25*(100- (double) arrayOfErros[0] /5)+0.25*(100- (double) arrayOfErros[1] /5)
+                        +0.25*(100- (double) arrayOfErros[2] /5)+0.25*(100- (double) arrayOfErros[3] /5);
+
+                horarioPontuacao=pontuacao;
+                System.out.println("Pontuação:"+horarioPontuacao+pontuacao);
+                //return (int)pontuacao;
+        }
     }
-
 }

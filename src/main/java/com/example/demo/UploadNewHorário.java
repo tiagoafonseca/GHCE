@@ -60,6 +60,7 @@ public class UploadNewHorário {
 
 
 
+
     @GetMapping("/json")
     public ResponseEntity<Resource> getJsonFile() throws IOException {
         File horario=new File("./Horários/"+h.getName()+".json");
@@ -69,13 +70,14 @@ public class UploadNewHorário {
             metricas.tinderMatch(a);
         }
         metricas.printMap();
-        metricas.setHorarioPontuacao(20);
+        metricas.calcularPontuacao();
         h.setQualidade(metricas);
         myWriter.write(h.writeMySelf());
         myWriter.flush();
         myWriter.close();
         ManagerHorários.getHorarios().add(h);
         ManagerHorários.selectOne=h;
+
         if (!horario.exists()) {
             return ResponseEntity.notFound().build(); // Return 404 if file doesn't exist
         }
